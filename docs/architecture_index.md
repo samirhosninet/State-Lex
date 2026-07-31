@@ -1,7 +1,7 @@
 # Shadow State — Master Architecture Index (Single Source of Truth)
 
 **Project**: Shadow State (Browser-Only Geopolitical Strategy Simulation MVP: El Alamein & Ras El Hekma)  
-**Document Status**: Canonical Architectural Authority (v1.0.0 Freeze)  
+**Document Status**: Canonical Architectural Authority (v1.1 Freeze Baseline)  
 
 ---
 
@@ -61,7 +61,7 @@ Shadow State is a client-side, browser-only geopolitical strategy simulation MVP
 
 ---
 
-## 3. ADR Registry
+## 3. ADR Registry (Level 3 SSoT)
 
 - 🔹 [ADR-001: Hexagonal Architecture](adr/ADR-001-hexagonal-architecture.md) — Layer isolation & ports
 - 🔹 [ADR-002: Seed-Based Deterministic PRNG](adr/ADR-002-seeded-prng-determinism.md) — Mulberry32 PRNG engine
@@ -73,10 +73,11 @@ Shadow State is a client-side, browser-only geopolitical strategy simulation MVP
 
 ## 4. Executable Task Registry (Locked to Exactly 22 Tasks)
 
+- **Task Registry SSoT**: 🚀 [docs/task_registry_lock.md](task_registry_lock.md)
 - **Phase 0**: Tasks `TASK-001` & `TASK-002` (Setup & AST Linter Rule)
-- **Phase 1**: Tasks `TASK-003` to `TASK-005` (Domain Core Aggregates & PRNG)
-- **Phase 2**: Tasks `TASK-006` & `TASK-007` (Application Use Cases & Primary Port)
-- **Phase 3**: Tasks `TASK-008` to `TASK-014` (Infrastructure Adapters)
+- **Phase 1**: Tasks `TASK-003` to `TASK-007` (Domain Core Aggregates & PRNG)
+- **Phase 2**: Tasks `TASK-008` to `TASK-010` (Application Use Cases & Primary Port)
+- **Phase 3**: Tasks `TASK-011` to `TASK-014` (Infrastructure Adapters)
 - **Phase 4**: Task `TASK-015` (React UI View Components)
 - **Phase 5**: Task `TASK-016` (Composition Root & Bundle Assembly)
 - **Phase 6**: Tasks `TASK-017` to `TASK-019` (Integration Test Suite)
@@ -88,9 +89,10 @@ Shadow State is a client-side, browser-only geopolitical strategy simulation MVP
 
 ## 5. Master Architecture Acceptance & Verification Suite
 
-- ✅ [Final Architecture Acceptance Audit](final_architecture_acceptance_audit.md) — Acceptance Audit (**APPROVED FOR CODE GENERATION**)
-- 🏛️ [Independent Principal Architecture Review Board Report](independent_principal_architecture_review_board_report.md) — Review Audit
-- 🔬 [Master Self-Verification & Evidence Validation Report](self_verification_report.md) — Verification Audit
-- 🎯 [Requirements Traceability Matrix](requirements_traceability_matrix.md) — 100% Traceability
-- 🔌 [Canonical Port Contracts](port_contracts.md) — Interface Contracts
-- 🧩 [Domain Model Specification](domain_model_specification.md) — Domain Specification
+- ⚙️ [Architecture Reconciliation Report](architecture_reconciliation_report.md) — Reconciliation Baseline v1.1
+- 🏆 [Architecture v1.1 Readiness Report](architecture_v1_1_readiness_report.md) — **READY FOR IMPLEMENTATION**
+- 🔒 [Task Registry Lock](task_registry_lock.md) — Exactly 22 Tasks
+- 🎯 [Final Traceability Matrix](final_traceability_matrix.md) — 100% Traceability
+- ✅ [Final Architecture Acceptance Audit](final_architecture_acceptance_audit.md) — Acceptance Audit
+- 🔌 [Canonical Port Contracts](port_contracts.md) — Interface Contracts SSoT
+- 🧩 [Domain Model Specification](domain_model_specification.md) — Domain Specification SSoT

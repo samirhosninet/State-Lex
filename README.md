@@ -1,12 +1,12 @@
 # Shadow State — Browser-Only Geopolitical Strategy Simulation MVP
 
-[![Architecture Freeze](https://img.shields.io/badge/Architecture-Frozen-blue.svg)](docs/architecture_index.md)
-[![Implementation Status](https://img.shields.io/badge/Implementation-Not_Started-red.svg)](docs/tasks.md)
-[![Spec Kit Readiness](https://img.shields.io/badge/Spec_Kit_Readiness-100%2F100-success.svg)](docs/speckit_analysis_report.md)
+[![Architecture Freeze](https://img.shields.io/badge/Architecture-Frozen_v1.1-blue.svg)](docs/architecture_index.md)
+[![Implementation Status](https://img.shields.io/badge/Implementation-Not_Started-red.svg)](docs/task_registry_lock.md)
+[![Spec Kit Readiness](https://img.shields.io/badge/Spec_Kit_Readiness-100%2F100-success.svg)](docs/architecture_v1_1_readiness_report.md)
 
 > **IMPORTANT DECLARATION**:  
 > **"No production source code has been implemented."**  
-> This repository is currently a **Documentation-Only Architecture Freeze Repository**. All specifications, architectural decision records (ADRs), threat models, implementation plans, and executable task breakdowns have been fully ratified and locked prior to code generation.
+> This repository is currently a **Documentation-Only Architecture Freeze Repository (v1.1 Baseline)**. All specifications, architectural decision records (ADRs), threat models, implementation plans, and executable task breakdowns have been fully ratified, reconciled, and locked prior to code generation.
 
 ---
 
@@ -44,20 +44,15 @@ All finalized, ratified architectural and planning documentation is indexed in [
 | Document Artifact | Description | Status / Verdict |
 | :--- | :--- | :--- |
 | 📐 [docs/architecture_index.md](docs/architecture_index.md) | Master Architecture Index & Document Map | **Single Source of Truth** |
-| ✅ [docs/final_architecture_acceptance_audit.md](docs/final_architecture_acceptance_audit.md) | Final Architecture Acceptance Audit Report | **APPROVED FOR CODE GENERATION** |
-| 🏛️ [docs/independent_principal_architecture_review_board_report.md](docs/independent_principal_architecture_review_board_report.md) | Independent Architecture Review Board Report | PASS WITH OBSERVATIONS |
-| 🔬 [docs/self_verification_report.md](docs/self_verification_report.md) | Master Self-Verification & Evidence Validation Report | PASS WITH OBSERVATIONS |
+| 🏆 [docs/architecture_v1_1_readiness_report.md](docs/architecture_v1_1_readiness_report.md) | Architecture v1.1 Readiness Report | **READY FOR IMPLEMENTATION** |
+| ⚙️ [docs/architecture_reconciliation_report.md](docs/architecture_reconciliation_report.md) | Architecture Reconciliation Report Baseline v1.1 | **Reconciled v1.1** |
+| 🔒 [docs/task_registry_lock.md](docs/task_registry_lock.md) | Locked Task Registry (Exactly 22 Tasks) | **Locked (22 Tasks)** |
+| 🎯 [docs/final_traceability_matrix.md](docs/final_traceability_matrix.md) | Final Requirements Traceability Matrix | **100% Traceable** |
 | 📜 [docs/constitution.md](docs/constitution.md) | Supreme governing principles & Phase Gate directive | Ratified & Active |
 | 🏛️ [docs/architecture_package.md](docs/architecture_package.md) | Full architectural specification, C4 diagrams & ADRs | Score: 94/100 |
 | 🔌 [docs/port_contracts.md](docs/port_contracts.md) | Canonical TypeScript Application & Infrastructure Ports | SSoT Interface Contracts |
 | 📖 [docs/glossary.md](docs/glossary.md) | Unified Domain & Technical Terminology Glossary | SSoT Terminology |
 | 🔹 [ADRs (ADR-001 to ADR-005)](docs/adr/) | Standalone Architectural Decision Records | Ratified & Frozen |
-| 🎯 [docs/requirements_traceability_matrix.md](docs/requirements_traceability_matrix.md) | Requirements to Architecture & Task Traceability | 100% Traceable |
-| 🛡️ [docs/threat_model.md](docs/threat_model.md) | STRIDE & LINDDUN Threat Model | Audited |
-| ⚡ [docs/fitness_functions.md](docs/fitness_functions.md) | Architecture Fitness Function Specifications | Specified |
-| 📋 [docs/implementation_plan_package.md](docs/implementation_plan_package.md) | Technical roadmap, data model & port contracts | Score: 100/100 |
-| 🚀 [docs/tasks.md](docs/tasks.md) | 22 dependency-ordered executable implementation tasks | Score: 100/100 |
-| 🏆 [docs/master_architecture_certification.md](docs/master_architecture_certification.md) | Master Architecture Certification Report | READY FOR IMPLEMENTATION |
 
 ---
 
@@ -65,9 +60,9 @@ All finalized, ratified architectural and planning documentation is indexed in [
 
 ```
 ===========================================================
-Architecture Status:     FROZEN (Package v1.0.0)
+Architecture Status:     FROZEN (Package Baseline v1.1)
 Planning Status:         COMPLETE
-Tasks Status:            COMPLETE (22 Tasks Locked)
+Tasks Status:            LOCKED (Exactly 22 Tasks)
 Validation Status:       COMPLETE
 Implementation Status:   NOT STARTED
 ===========================================================
@@ -80,7 +75,7 @@ Implementation Status:   NOT STARTED
 ### Working Files Report:
 - Local virtual environment `.venv/` and Spec Kit CLI tool `spec-kit/` are preserved for execution.
 - Scripts `specify.bat` and `specify.ps1` exist for local CLI invocation.
-- All 35 architecture documents are published into `/docs/` and synced with `.specify/memory/`.
+- All 39 architecture documents are published into `/docs/` and synced with `.specify/memory/`.
 
 ---
 
@@ -95,9 +90,9 @@ For publishing this architecture freeze documentation package to GitHub:
 2. **Commit Message**:
    ```bash
    git add docs/ README.md .specify/
-   git commit -m "docs: publish final architecture acceptance audit"
+   git commit -m "docs: publish architecture freeze specification package v1.1"
    ```
 3. **Pull Request**: Open a PR to `main` for team review and merge.
 
 ---
-*Shadow State Architecture Package v1.0.0 — Ready for Implementation Phase.*
+*Shadow State Architecture Package Baseline v1.1 — Ready for Implementation Phase.*
