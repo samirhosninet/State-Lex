@@ -3,7 +3,6 @@ import { join } from 'path';
 import { execSync } from 'child_process';
 import { StartGameUseCase } from '../../application/usecases/StartGameUseCase';
 import { ProcessTurnUseCase } from '../../application/usecases/ProcessTurnUseCase';
-import { computeStateHash } from '../../application/services/CanonicalHashService';
 import { HumanManualTelemetryRecord } from '../../presentation/GameView';
 
 export function validateManualSessionFile(sessionFilePath: string): void {

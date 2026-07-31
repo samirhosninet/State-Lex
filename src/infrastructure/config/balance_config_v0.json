@@ -1,0 +1,15 @@
+{
+  "initialTrust": {
+    "StateAdministration": 50,
+    "Investors": 50,
+    "SecurityEstablishment": 50,
+    "LocalCommunities": 50,
+    "Media": 50
+  },
+  "hysteresisThresholds": {
+    "UnstableEntry": 35,
+    "UnstableExit": 45,
+    "HostileEntry": 20,
+    "HostileExit": 30
+  }
+}

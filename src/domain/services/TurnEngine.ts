@@ -6,9 +6,116 @@ import { FixedPointResourcePool } from '../values/FixedPointResourcePool';
 import { Region } from '../entities/Region';
 import { Faction } from '../aggregates/Faction';
 
+import { InfluenceMatrix } from './InfluenceMatrix';
+import { TrustComponent, TrustState } from './TrustComponent';
+import { RuleMutationScheduler, WorldChangeRecord } from './RuleMutationScheduler';
+import { NeglectTracker, ConsequenceRecord } from './NeglectTracker';
+import { BalanceConfigData, MatrixSchemaData } from './MatrixSchemaValidator';
+
 export interface TurnExecutionResult {
   readonly newState: GameState;
   readonly prngCallsCount: number;
+}
+
+export interface GSTAllocationMoveInput {
+  sourceIndex: number;
+  targetIndex: number;
+  amount: number;
+}
+
+export interface GSTTurnExecutionResult {
+  turnNumber: number;
+  allocationBefore: number[];
+  allocationAfter: number[];
+  trustStatesBefore: TrustState[];
+  trustStatesAfter: TrustState[];
+  internalScoresAfter: number[];
+  worldChanges: WorldChangeRecord[];
+  consequences: ConsequenceRecord[];
+}
+
+export class GSTTurnEngine {
+  private _turnNumber: number = 1;
+  private readonly _allocationVector: number[] = [20, 20, 20, 20, 20];
+  private readonly _influenceMatrix: InfluenceMatrix;
+  private readonly _trustComponents: TrustComponent[];
+  private readonly _mutationScheduler: RuleMutationScheduler;
+  private readonly _neglectTracker: NeglectTracker;
+
+  constructor(balanceConfig: BalanceConfigData, matrixData: MatrixSchemaData) {
+    this._influenceMatrix = new InfluenceMatrix(matrixData);
+    this._mutationScheduler = new RuleMutationScheduler();
+    this._neglectTracker = new NeglectTracker();
+
+    const initialTrust = balanceConfig.initialTrust;
+    const thresholds = balanceConfig.hysteresisThresholds;
+    const vectorOrder = matrixData.vectorOrder;
+
+    this._trustComponents = vectorOrder.map(actorName => {
+      const score = initialTrust[actorName] ?? 50;
+      return new TrustComponent(score, thresholds);
+    });
+  }
+
+  public get turnNumber(): number {
+    return this._turnNumber;
+  }
+
+  public get allocationVector(): number[] {
+    return [...this._allocationVector];
+  }
+
+  public get trustStates(): TrustState[] {
+    return this._trustComponents.map(tc => tc.visibleState);
+  }
+
+  public get internalScores(): number[] {
+    return this._trustComponents.map(tc => tc.internalScore);
+  }
+
+  public executeTurn(moveInput: GSTAllocationMoveInput): GSTTurnExecutionResult {
+    if (moveInput.sourceIndex < 0 || moveInput.sourceIndex >= 5 || moveInput.targetIndex < 0 || moveInput.targetIndex >= 5) {
+      throw new Error(`Invalid move input: actor index out of bounds [${moveInput.sourceIndex}, ${moveInput.targetIndex}].`);
+    }
+
+    if (moveInput.amount < 0 || this._allocationVector[moveInput.sourceIndex] < moveInput.amount) {
+      throw new Error(`Invalid move input: amount ${moveInput.amount} exceeds source allocation ${this._allocationVector[moveInput.sourceIndex]}.`);
+    }
+
+    const allocationBefore = [...this._allocationVector];
+    const trustStatesBefore = this.trustStates;
+
+    this._allocationVector[moveInput.sourceIndex] -= moveInput.amount;
+    this._allocationVector[moveInput.targetIndex] += moveInput.amount;
+
+    const sum = this._allocationVector.reduce((a, b) => a + b, 0);
+    if (sum !== 100) {
+      throw new Error(`Allocation sum invariant breached: expected 100, got ${sum}.`);
+    }
+
+    const allocationAfter = [...this._allocationVector];
+    const rawDeltas = this._influenceMatrix.computeTrustDeltas(allocationAfter);
+    const trustStatesAfter = this._trustComponents.map((tc, idx) => tc.updateScore(rawDeltas[idx]));
+    const internalScoresAfter = this.internalScores;
+
+    const worldChanges = this._mutationScheduler.evaluateStep6(this._turnNumber, this._influenceMatrix);
+    const consequences = this._neglectTracker.evaluateStep7(this._turnNumber, trustStatesAfter);
+
+    const result: GSTTurnExecutionResult = {
+      turnNumber: this._turnNumber,
+      allocationBefore,
+      allocationAfter,
+      trustStatesBefore,
+      trustStatesAfter,
+      internalScoresAfter,
+      worldChanges,
+      consequences
+    };
+
+    this._turnNumber++;
+
+    return result;
+  }
 }
 
 export class TurnEngine {

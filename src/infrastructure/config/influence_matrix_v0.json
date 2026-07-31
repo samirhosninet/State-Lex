@@ -1,0 +1,26 @@
+{
+  "schemaDomain": {
+    "minWeight": -1.0,
+    "maxWeight": 1.0
+  },
+  "vectorOrder": [
+    "StateAdministration",
+    "Investors",
+    "SecurityEstablishment",
+    "LocalCommunities",
+    "Media"
+  ],
+  "edgeWeights": [
+    [0.0, 0.2, 0.3, -0.2, 0.1],
+    [-0.1, 0.0, 0.2, -0.3, -0.2],
+    [0.2, 0.2, 0.0, -0.4, -0.3],
+    [0.1, -0.2, -0.3, 0.0, 0.3],
+    [-0.3, -0.2, -0.2, 0.4, 0.0]
+  ],
+  "turn11Mutation": {
+    "sourceActor": "StateAdministration",
+    "targetActor": "Investors",
+    "previousWeight": 0.2,
+    "newWeight": 0.5
+  }
+}
