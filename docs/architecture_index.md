@@ -25,8 +25,9 @@
 
 ---
 
-## 🛡️ Architecture Evidence & Certification Suite
+## 🛡️ Architecture Evidence & Verification Suite
 
+- 🔬 [Master Self-Verification & Evidence Validation Report](self_verification_report.md) — Fresh Independent Audit (**PASS WITH OBSERVATIONS**)
 - 📋 [Architecture Completeness Audit](architecture_completeness_audit.md)
 - 🎯 [Requirements Traceability Matrix](requirements_traceability_matrix.md)
 - 🔬 [Architecture Consistency Matrix](architecture_consistency_matrix.md)

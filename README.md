@@ -44,6 +44,7 @@ All finalized, ratified architectural and planning documentation is indexed in [
 | Document Artifact | Description | Status / Verdict |
 | :--- | :--- | :--- |
 | 📐 [docs/architecture_index.md](docs/architecture_index.md) | Master Architecture Index & Document Map | **Single Source of Truth** |
+| 🔬 [docs/self_verification_report.md](docs/self_verification_report.md) | Master Self-Verification & Evidence Validation Report | **PASS WITH OBSERVATIONS** |
 | 📜 [docs/constitution.md](docs/constitution.md) | Supreme governing principles & Phase Gate directive | Ratified & Active |
 | 🏛️ [docs/architecture_package.md](docs/architecture_package.md) | Full architectural specification, C4 diagrams & ADRs | Score: 94/100 |
 | 🔌 [docs/port_contracts.md](docs/port_contracts.md) | Canonical TypeScript Application & Infrastructure Ports | SSoT Interface Contracts |
@@ -77,7 +78,7 @@ Implementation Status:   NOT STARTED
 ### Working Files Report:
 - Local virtual environment `.venv/` and Spec Kit CLI tool `spec-kit/` are preserved for execution.
 - Scripts `specify.bat` and `specify.ps1` exist for local CLI invocation.
-- All 32 architecture documents are published into `/docs/` and synced with `.specify/memory/`.
+- All 33 architecture documents are published into `/docs/` and synced with `.specify/memory/`.
 
 ---
 
@@ -92,7 +93,7 @@ For publishing this architecture freeze documentation package to GitHub:
 2. **Commit Message**:
    ```bash
    git add docs/ README.md .specify/
-   git commit -m "docs: publish complete architecture evidence & certification package"
+   git commit -m "docs: publish self-verified architecture freeze package v1.0.0"
    ```
 3. **Pull Request**: Open a PR to `main` for team review and merge.
 
