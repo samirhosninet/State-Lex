@@ -6,7 +6,7 @@
 
 ## 🏛️ Governing Specifications
 
-- 📜 [Constitution](constitution.md) — Governing principles & Phase Gate directive (v1.0.0)
+- 📜 [Constitution](constitution.md) — Supreme governing principles & Phase Gate directive (v1.0.0)
 - 📐 [Architecture Package](architecture_package.md) — Core C4 diagrams & structural design
 - 📋 [Implementation Plan Package](implementation_plan_package.md) — Roadmap, data model & port contracts
 - 🚀 [Executable Task Breakdown](tasks.md) — 22 dependency-ordered implementation tasks
@@ -25,14 +25,20 @@
 
 ---
 
-## 🛡️ Audit & Certification Reports
+## 🛡️ Architecture Evidence & Certification Suite
 
-- 🛡️ [Architecture Certification Report](architecture_certification.md) — 20 mandatory architectural quality gates
-- ⚔️ [Adversarial Stress Test Audit](architecture_stress_test_audit.md) — Threat model & failure mode audit
-- 🔍 [Spec Kit Analysis Report](speckit_analysis_report.md) — Read-only Spec Kit consistency audit
-- 🔬 [Spec Kit Quality Checklist](checklist.md) — Clarity & completeness checklist
-- ✅ [Final Architecture Validation](final_architecture_validation.md) — Production readiness review
-- 📊 [GitHub Documentation Audit Report](github_docs_audit_report.md) — Repository audit
-- 🏆 [Final Architecture Freeze Certification](final_architecture_freeze_certification.md) — Official freeze certification
-- 👑 [Master Architecture Freeze Audit](github_architecture_freeze_master_audit.md) — Master audit report
-- 🛡️ [Master Independent Verification Report](master_independent_verification_report.md) — Zero-trust verification report
+- 📋 [Architecture Completeness Audit](architecture_completeness_audit.md)
+- 🎯 [Requirements Traceability Matrix](requirements_traceability_matrix.md)
+- 🔬 [Architecture Consistency Matrix](architecture_consistency_matrix.md)
+- 🔍 [Theoretical Dependency Verification](dependency_verification.md)
+- ⚡ [Architecture Fitness Functions](fitness_functions.md)
+- ⚠️ [Failure Mode & Effects Analysis (FMEA)](fmea.md)
+- 🛡️ [STRIDE & LINDDUN Threat Model](threat_model.md)
+- 🏛️ [Architecture Review Board Report](architecture_review_board.md)
+- 📑 [Decision Coverage Report](decision_coverage.md)
+- 📝 [Documentation Quality Report](documentation_quality.md)
+- 📐 [C4 Diagram Model Validation](c4_validation.md)
+- 📊 [Master Architecture Risk Register](architecture_risk_register.md)
+- 🔍 [Architecture Gap Analysis Report](gap_analysis.md)
+- ⚡ [Non-Functional Requirements (NFR) Validation](nfr_validation.md)
+- 🏆 [Master Architecture Certification Report](master_architecture_certification.md)

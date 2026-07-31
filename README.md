@@ -49,16 +49,12 @@ All finalized, ratified architectural and planning documentation is indexed in [
 | 🔌 [docs/port_contracts.md](docs/port_contracts.md) | Canonical TypeScript Application & Infrastructure Ports | SSoT Interface Contracts |
 | 📖 [docs/glossary.md](docs/glossary.md) | Unified Domain & Technical Terminology Glossary | SSoT Terminology |
 | 🔹 [ADRs (ADR-001 to ADR-005)](docs/adr/) | Standalone Architectural Decision Records | Ratified & Frozen |
+| 🎯 [docs/requirements_traceability_matrix.md](docs/requirements_traceability_matrix.md) | Requirements to Architecture & Task Traceability | 100% Traceable |
+| 🛡️ [docs/threat_model.md](docs/threat_model.md) | STRIDE & LINDDUN Threat Model | Audited |
+| ⚡ [docs/fitness_functions.md](docs/fitness_functions.md) | Architecture Fitness Function Specifications | Specified |
 | 📋 [docs/implementation_plan_package.md](docs/implementation_plan_package.md) | Technical roadmap, data model & port contracts | Score: 100/100 |
 | 🚀 [docs/tasks.md](docs/tasks.md) | 22 dependency-ordered executable implementation tasks | Score: 100/100 |
-| 🔍 [docs/speckit_analysis_report.md](docs/speckit_analysis_report.md) | Independent Spec Kit read-only consistency audit | Score: 100/100 |
-| 🔬 [docs/checklist.md](docs/checklist.md) | Spec Kit requirement clarity & completeness checklist | Score: 100/100 |
-| ✅ [docs/final_architecture_validation.md](docs/final_architecture_validation.md) | Final architecture sign-off & production readiness | APPROVED FOR IMPLEMENTATION |
-| 📊 [docs/github_docs_audit_report.md](docs/github_docs_audit_report.md) | Critical adversarial repository audit & readiness report | Score: 94.7/100 |
-| 🏆 [docs/final_architecture_freeze_certification.md](docs/final_architecture_freeze_certification.md) | Official Architecture Freeze Certification | CERTIFIED AS ARCHITECTURE DOCUMENTATION REPOSITORY |
-| 👑 [docs/github_architecture_freeze_master_audit.md](docs/github_architecture_freeze_master_audit.md) | Master Architecture Freeze Audit Report | CERTIFIED AS ARCHITECTURE DOCUMENTATION REPOSITORY |
-| 🛡️ [docs/master_independent_verification_report.md](docs/master_independent_verification_report.md) | Zero-Trust Independent Verification Audit Report | READY FOR IMPLEMENTATION |
-| ⚙️ [docs/architecture_governance_report.md](docs/architecture_governance_report.md) | Single Source of Truth Governance & Normalization Report | **READY FOR IMPLEMENTATION** |
+| 🏆 [docs/master_architecture_certification.md](docs/master_architecture_certification.md) | Master Architecture Certification Report | **READY FOR IMPLEMENTATION** |
 
 ---
 
@@ -81,7 +77,7 @@ Implementation Status:   NOT STARTED
 ### Working Files Report:
 - Local virtual environment `.venv/` and Spec Kit CLI tool `spec-kit/` are preserved for execution.
 - Scripts `specify.bat` and `specify.ps1` exist for local CLI invocation.
-- All 18 architecture documents are published into `/docs/` and synced with `.specify/memory/`.
+- All 32 architecture documents are published into `/docs/` and synced with `.specify/memory/`.
 
 ---
 
@@ -96,7 +92,7 @@ For publishing this architecture freeze documentation package to GitHub:
 2. **Commit Message**:
    ```bash
    git add docs/ README.md .specify/
-   git commit -m "docs: publish finalized architecture freeze package v1.0.0"
+   git commit -m "docs: publish complete architecture evidence & certification package"
    ```
 3. **Pull Request**: Open a PR to `main` for team review and merge.
 
