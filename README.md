@@ -44,18 +44,20 @@ All finalized, ratified architectural and planning documentation is indexed in [
 | Document Artifact | Description | Status / Verdict |
 | :--- | :--- | :--- |
 | 📐 [docs/architecture_index.md](docs/architecture_index.md) | Master Architecture Index & Document Map | **Single Source of Truth** |
+| ✅ [docs/final_architecture_acceptance_audit.md](docs/final_architecture_acceptance_audit.md) | Final Architecture Acceptance Audit Report | **APPROVED FOR CODE GENERATION** |
+| 🏛️ [docs/independent_principal_architecture_review_board_report.md](docs/independent_principal_architecture_review_board_report.md) | Independent Architecture Review Board Report | PASS WITH OBSERVATIONS |
+| 🔬 [docs/self_verification_report.md](docs/self_verification_report.md) | Master Self-Verification & Evidence Validation Report | PASS WITH OBSERVATIONS |
 | 📜 [docs/constitution.md](docs/constitution.md) | Supreme governing principles & Phase Gate directive | Ratified & Active |
 | 🏛️ [docs/architecture_package.md](docs/architecture_package.md) | Full architectural specification, C4 diagrams & ADRs | Score: 94/100 |
 | 🔌 [docs/port_contracts.md](docs/port_contracts.md) | Canonical TypeScript Application & Infrastructure Ports | SSoT Interface Contracts |
 | 📖 [docs/glossary.md](docs/glossary.md) | Unified Domain & Technical Terminology Glossary | SSoT Terminology |
-| 🧩 [docs/domain_model_specification.md](docs/domain_model_specification.md) | Canonical Domain Entities & Value Objects Spec | Ratified & Frozen |
-| 💾 [docs/persistence_specification.md](docs/persistence_specification.md) | Atomic Persistence & BigInt Storage Spec | Ratified & Frozen |
-| 🎲 [docs/determinism_specification.md](docs/determinism_specification.md) | Seeded PRNG & Determinism Specification | Ratified & Frozen |
-| 📐 [docs/project_structure_blueprint.md](docs/project_structure_blueprint.md) | Architectural Directory Structure Blueprint | Target Blueprint |
 | 🔹 [ADRs (ADR-001 to ADR-005)](docs/adr/) | Standalone Architectural Decision Records | Ratified & Frozen |
 | 🎯 [docs/requirements_traceability_matrix.md](docs/requirements_traceability_matrix.md) | Requirements to Architecture & Task Traceability | 100% Traceable |
+| 🛡️ [docs/threat_model.md](docs/threat_model.md) | STRIDE & LINDDUN Threat Model | Audited |
+| ⚡ [docs/fitness_functions.md](docs/fitness_functions.md) | Architecture Fitness Function Specifications | Specified |
+| 📋 [docs/implementation_plan_package.md](docs/implementation_plan_package.md) | Technical roadmap, data model & port contracts | Score: 100/100 |
 | 🚀 [docs/tasks.md](docs/tasks.md) | 22 dependency-ordered executable implementation tasks | Score: 100/100 |
-| 🏆 [docs/final_architecture_readiness_report.md](docs/final_architecture_readiness_report.md) | Final Architecture Readiness Report | **READY FOR IMPLEMENTATION** |
+| 🏆 [docs/master_architecture_certification.md](docs/master_architecture_certification.md) | Master Architecture Certification Report | READY FOR IMPLEMENTATION |
 
 ---
 
@@ -78,7 +80,7 @@ Implementation Status:   NOT STARTED
 ### Working Files Report:
 - Local virtual environment `.venv/` and Spec Kit CLI tool `spec-kit/` are preserved for execution.
 - Scripts `specify.bat` and `specify.ps1` exist for local CLI invocation.
-- All 39 architecture documents are published into `/docs/` and synced with `.specify/memory/`.
+- All 35 architecture documents are published into `/docs/` and synced with `.specify/memory/`.
 
 ---
 
@@ -93,7 +95,7 @@ For publishing this architecture freeze documentation package to GitHub:
 2. **Commit Message**:
    ```bash
    git add docs/ README.md .specify/
-   git commit -m "docs: complete architecture freeze specification package"
+   git commit -m "docs: publish final architecture acceptance audit"
    ```
 3. **Pull Request**: Open a PR to `main` for team review and merge.
 

@@ -48,7 +48,7 @@ Shadow State is a client-side, browser-only geopolitical strategy simulation MVP
 │  - Aggregates: GameState, Faction                                         │
 │  - Entities: Region, TurnAction                                           │
 │  - Value Objects: TurnSeed, TurnNumber, FixedPointResourcePool            │
-└───────────────────────────────────────────────────────────────────────────┘
+└─────────────────────────────────────┴─────────────────────────────────────┘
                                       ▲
                                       │ Implements Secondary Ports
 ┌─────────────────────────────────────┴─────────────────────────────────────┐
@@ -86,18 +86,11 @@ Shadow State is a client-side, browser-only geopolitical strategy simulation MVP
 
 ---
 
-## 5. Master Document Dependency Graph
+## 5. Master Architecture Acceptance & Verification Suite
 
-```
-[constitution.md] (Supreme Law)
-       │
-       ▼
-[architecture_index.md] (Canonical SSoT)
-       ├──> [adr/ADR-001... to ADR-005...]
-       ├──> [domain_model_specification.md]
-       ├──> [ports_contracts.md]
-       ├──> [persistence_specification.md]
-       ├──> [determinism_specification.md]
-       ├──> [project_structure_blueprint.md]
-       └──> [tasks.md] (22 Executable Tasks)
-```
+- ✅ [Final Architecture Acceptance Audit](final_architecture_acceptance_audit.md) — Acceptance Audit (**APPROVED FOR CODE GENERATION**)
+- 🏛️ [Independent Principal Architecture Review Board Report](independent_principal_architecture_review_board_report.md) — Review Audit
+- 🔬 [Master Self-Verification & Evidence Validation Report](self_verification_report.md) — Verification Audit
+- 🎯 [Requirements Traceability Matrix](requirements_traceability_matrix.md) — 100% Traceability
+- 🔌 [Canonical Port Contracts](port_contracts.md) — Interface Contracts
+- 🧩 [Domain Model Specification](domain_model_specification.md) — Domain Specification
