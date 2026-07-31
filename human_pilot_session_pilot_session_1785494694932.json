@@ -1,0 +1,77 @@
+{
+  "sessionId": "pilot_session_1785494694932",
+  "startedAt": "2026-07-31T10:44:54.932Z",
+  "endedAt": "2026-07-31T10:44:56.284Z",
+  "events": [
+    {
+      "eventId": "evt_1_1785494695448",
+      "timestamp": "2026-07-31T10:44:55.448Z",
+      "inputSource": "human_click",
+      "turnNumber": 1,
+      "command": {
+        "actionType": "DEVELOP_MONEY",
+        "targetRegionId": "EL_ALAMEIN"
+      },
+      "reasonCode": "A",
+      "decisionTimeMs": 203,
+      "stateBeforeHash": "e2ef23864e25cb75cfff714d3ac281735b43dc6de2113b64d4825ae27c934569",
+      "stateAfterHash": "8299ad0c979d573a0f2e7658db68ad7119bdb9494f0fb42cbc5f4f27e852b66f"
+    },
+    {
+      "eventId": "evt_2_1785494695650",
+      "timestamp": "2026-07-31T10:44:55.650Z",
+      "inputSource": "human_click",
+      "turnNumber": 2,
+      "command": {
+        "actionType": "DEVELOP_INFLUENCE",
+        "targetRegionId": "EL_ALAMEIN"
+      },
+      "reasonCode": "B",
+      "decisionTimeMs": 200,
+      "stateBeforeHash": "8299ad0c979d573a0f2e7658db68ad7119bdb9494f0fb42cbc5f4f27e852b66f",
+      "stateAfterHash": "062d2b17ceccf57e75686a049a5f3a15b28f1b8c96bced40137478c93fd04e47"
+    },
+    {
+      "eventId": "evt_3_1785494695838",
+      "timestamp": "2026-07-31T10:44:55.838Z",
+      "inputSource": "human_click",
+      "turnNumber": 3,
+      "command": {
+        "actionType": "FORTIFY",
+        "targetRegionId": "EL_ALAMEIN"
+      },
+      "reasonCode": "C",
+      "decisionTimeMs": 187,
+      "stateBeforeHash": "062d2b17ceccf57e75686a049a5f3a15b28f1b8c96bced40137478c93fd04e47",
+      "stateAfterHash": "27a2e4bfcb05ff975f0c56c648206bfd5ef26d9327d16673a9ca0071a0967509"
+    },
+    {
+      "eventId": "evt_4_1785494696026",
+      "timestamp": "2026-07-31T10:44:56.026Z",
+      "inputSource": "human_click",
+      "turnNumber": 4,
+      "command": {
+        "actionType": "DEVELOP_MONEY",
+        "targetRegionId": "RAS_EL_HEKMA"
+      },
+      "reasonCode": "A",
+      "decisionTimeMs": 187,
+      "stateBeforeHash": "27a2e4bfcb05ff975f0c56c648206bfd5ef26d9327d16673a9ca0071a0967509",
+      "stateAfterHash": "e2c0ab900b958d16ed62938db80fd5e49c9f9b2a7bfb486c000c557d6f81849a"
+    },
+    {
+      "eventId": "evt_5_1785494696214",
+      "timestamp": "2026-07-31T10:44:56.214Z",
+      "inputSource": "human_click",
+      "turnNumber": 5,
+      "command": {
+        "actionType": "REDEPLOY",
+        "targetRegionId": "RAS_EL_HEKMA"
+      },
+      "reasonCode": "E",
+      "decisionTimeMs": 187,
+      "stateBeforeHash": "e2c0ab900b958d16ed62938db80fd5e49c9f9b2a7bfb486c000c557d6f81849a",
+      "stateAfterHash": "c32188815c079adc702fb2103805a2fd1306b9dac7bd6e6062ca62bd29ce9904"
+    }
+  ]
+}
