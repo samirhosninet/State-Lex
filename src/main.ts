@@ -8,6 +8,7 @@ import { GameStateMapper } from './application/mappers/GameStateMapper';
 import { computeStateHash } from './application/services/CanonicalHashService';
 import { SnapshotEnvelopeDTO } from './application/dtos/Snapshots';
 import { IndexedDBStorageAdapter } from './infrastructure/persistence/IndexedDBStorageAdapter';
+import { GameView } from './presentation/GameView';
 
 export interface ChromiumTestResult {
   readonly originalHash: string;
@@ -60,3 +61,11 @@ export async function runRoundTripIdentityTest(): Promise<ChromiumTestResult> {
 }
 
 (window as unknown as Record<string, unknown>).runRoundTripIdentityTest = runRoundTripIdentityTest;
+
+// Initialize Playable Vertical Slice UI if #app exists
+if (typeof document !== 'undefined') {
+  const appContainer = document.getElementById('app');
+  if (appContainer) {
+    new GameView(appContainer);
+  }
+}
