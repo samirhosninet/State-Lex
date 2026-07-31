@@ -50,7 +50,24 @@ export class TurnEngine {
         }
       } else if (action.actionType === "REDEPLOY") {
         if (region.defenseLevel <= 3) {
-          updatedRegions.set(region.id.value, region.withController(faction.id));
+          const previousControllerId = region.controllerFactionId;
+          const newControllerId = faction.id;
+          if (!previousControllerId.equals(newControllerId)) {
+            const updatedRegion = region.withController(newControllerId);
+            updatedRegions.set(region.id.value, updatedRegion);
+
+            const prevFaction = updatedFactions.get(previousControllerId.value);
+            if (prevFaction) {
+              const newPrevRegions = prevFaction.controlledRegionIds.filter(r => !r.equals(region.id));
+              updatedFactions.set(previousControllerId.value, prevFaction.withControlledRegions(newPrevRegions));
+            }
+
+            const newFaction = updatedFactions.get(newControllerId.value);
+            if (newFaction) {
+              const newNextRegions = [...newFaction.controlledRegionIds.filter(r => !r.equals(region.id)), region.id];
+              updatedFactions.set(newControllerId.value, newFaction.withControlledRegions(newNextRegions));
+            }
+          }
         }
       }
     }

@@ -1,19 +1,16 @@
-import { GameState } from '../../domain/aggregates/GameState';
 import { IPersistencePort } from '../ports/IPersistencePort';
-import { GameStateMapper } from '../mappers/GameStateMapper';
 import { computeStateHash } from '../services/CanonicalHashService';
-import { SnapshotEnvelopeDTO } from '../dtos/Snapshots';
+import { SnapshotEnvelopeDTO, GameStateSnapshotDTO } from '../dtos/Snapshots';
 
 export class SaveGameUseCase {
   constructor(private readonly persistencePort: IPersistencePort) {}
 
-  public async execute(state: GameState): Promise<boolean> {
-    const snapshotDTO = GameStateMapper.toSnapshot(state);
-    const stateHash = computeStateHash(snapshotDTO);
+  public async execute(snapshot: GameStateSnapshotDTO): Promise<boolean> {
+    const stateHash = computeStateHash(snapshot);
 
     const envelope: SnapshotEnvelopeDTO = {
       schemaVersion: "1.0.0",
-      state: snapshotDTO,
+      state: snapshot,
       stateHash
     };
 

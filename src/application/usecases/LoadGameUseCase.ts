@@ -1,12 +1,11 @@
-import { GameState } from '../../domain/aggregates/GameState';
 import { IPersistencePort } from '../ports/IPersistencePort';
-import { GameStateMapper } from '../mappers/GameStateMapper';
 import { computeStateHash } from '../services/CanonicalHashService';
+import { GameStateSnapshotDTO } from '../dtos/Snapshots';
 
 export class LoadGameUseCase {
   constructor(private readonly persistencePort: IPersistencePort) {}
 
-  public async execute(): Promise<GameState | null> {
+  public async execute(): Promise<GameStateSnapshotDTO | null> {
     const envelope = await this.persistencePort.loadActiveSnapshot();
     if (!envelope) return null;
 
@@ -19,6 +18,6 @@ export class LoadGameUseCase {
       throw new Error(`Snapshot corrupted: stored hash '${envelope.stateHash}' does not match computed hash '${computedHash}'.`);
     }
 
-    return GameStateMapper.fromSnapshot(envelope.state);
+    return envelope.state;
   }
 }

@@ -1,26 +1,40 @@
-import { GameState } from '../../domain/aggregates/GameState';
-import { TurnAction } from '../../domain/entities/TurnAction';
+import { TurnAction, ValidActionType } from '../../domain/entities/TurnAction';
 import { TurnEngine } from '../../domain/services/TurnEngine';
 import { DeterministicRuleAI } from '../services/DeterministicRuleAI';
 import { FactionId } from '../../domain/values/FactionId';
+import { RegionId } from '../../domain/values/RegionId';
 import { GameStateMapper } from '../mappers/GameStateMapper';
 import { computeStateHash } from '../services/CanonicalHashService';
+import { GameStateSnapshotDTO } from '../dtos/Snapshots';
+
+export interface PlayerActionInputDTO {
+  readonly actionType: ValidActionType;
+  readonly targetRegionId: "EL_ALAMEIN" | "RAS_EL_HEKMA";
+}
 
 export interface ProcessTurnResponse {
-  readonly newState: GameState;
+  readonly snapshot: GameStateSnapshotDTO;
   readonly prngCallsCount: number;
   readonly stateHash: string;
 }
 
 export class ProcessTurnUseCase {
-  public execute(currentState: GameState, playerAction: TurnAction | null): ProcessTurnResponse {
+  public execute(currentSnapshot: GameStateSnapshotDTO, input: PlayerActionInputDTO | null): ProcessTurnResponse {
+    const currentState = GameStateMapper.fromSnapshot(currentSnapshot);
     const actions: TurnAction[] = [];
 
-    if (playerAction) {
-      actions.push(playerAction);
+    if (input) {
+      actions.push(
+        new TurnAction(
+          `player-act-${currentState.turnNumber.value}`,
+          new FactionId("FACTION_ALPHA"),
+          new RegionId(input.targetRegionId),
+          input.actionType,
+          currentState.turnNumber
+        )
+      );
     }
 
-    // AI Action for FACTION_BETA
     const aiAction = DeterministicRuleAI.selectAction(currentState, new FactionId("FACTION_BETA"));
     if (aiAction) {
       actions.push(aiAction);
@@ -31,7 +45,7 @@ export class ProcessTurnUseCase {
     const stateHash = computeStateHash(snapshotDTO);
 
     return {
-      newState: turnResult.newState,
+      snapshot: snapshotDTO,
       prngCallsCount: turnResult.prngCallsCount,
       stateHash
     };
