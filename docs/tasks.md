@@ -18,44 +18,52 @@ This document defines the 22 production-grade executable tasks (`TASK-001` throu
 
 ```mermaid
 graph TD
-    P0_1[TASK-001: Vite & TS Setup] --> P0_2[TASK-002: ESLint M-01 Fitness Rule]
-    P0_2 --> P1_1[TASK-003: Immutable Value Objects]
-    P1_1 --> P1_2[TASK-004: FixedPointResourcePool ADR-004]
-    P1_1 --> P1_3[TASK-005: Mulberry32 PRNG]
-    P1_2 --> P1_4[TASK-006: Region & TurnAction Entities]
-    P1_4 --> P1_5[TASK-007: GameState & Faction Aggregates]
-    P1_3 --> P1_6[TASK-008: Pure TurnEngine Service]
+    P0_1[TASK-001: Vite, TS & Linters] --> P0_2[TASK-002: M-01 AST Fitness Rule]
+    P0_2 --> P1_1[TASK-003: Value Objects]
+    P1_1 --> P1_2[TASK-004: FixedPointResourcePool]
+    P1_1 --> P1_3[TASK-005: Seeded PRNG Engine]
+    P1_1 --> P1_4[TASK-006: Region & TurnAction Entities]
+    P1_2 --> P1_5[TASK-007: Faction & GameState Aggregates]
+    P1_4 --> P1_5
     
-    P1_5 --> P2_1[TASK-009: Application DTOs]
-    P1_6 --> P2_1
-    P2_1 --> P2_2[TASK-010: Application Port Interfaces]
-    P2_2 --> P2_3[TASK-011: ProcessTurn & StartGame UseCases]
+    P1_5 --> P2_1[TASK-008: StartGameUseCase]
+    P1_3 --> P2_2[TASK-009: ProcessTurnUseCase]
+    P1_5 --> P2_2
     
-    P2_2 --> P3_1[TASK-012: Atomic IndexedDB Adapter ADR-005]
-    P2_2 --> P3_2[TASK-013: Fetch & Mock LLM Adapters M-02]
-    P2_2 --> P3_3[TASK-014: PixiJS Canvas Render Adapter]
+    P2_1 --> P2_3[TASK-010: Application DTO Mappers]
+    P2_2 --> P2_3
     
-    P2_3 --> P4_1[TASK-015: React UI Views & Presenters]
+    P2_3 --> P3_1[TASK-011: MemoryStorageAdapter]
+    P3_1 --> P3_2[TASK-012: IndexedDBStorageAdapter]
+    P2_3 --> P3_3[TASK-013: LLM Adapters]
+    P2_3 --> P3_4[TASK-014: PixiJSCanvasAdapter]
+    
+    P2_1 --> P4_1[TASK-015: React UI Components]
+    P2_2 --> P4_1
+    P2_3 --> P4_1
+    P3_1 --> P4_1
+    P3_2 --> P4_1
     P3_3 --> P4_1
+    P3_4 --> P4_1
     
-    P3_1 --> P5_1[TASK-016: Composition Root Bootstrapper]
-    P3_2 --> P5_1
-    P3_3 --> P5_1
-    P4_1 --> P5_1
+    P4_1 --> P5_1[TASK-016: Composition Root main.ts]
     
-    P5_1 --> P6_1[TASK-017: Unit & Determinism Test Suite]
-    P5_1 --> P6_2[TASK-018: Offline & Storage Fallback Tests]
-    P5_1 --> P6_3[TASK-019: LLM Isolation Tests]
+    P5_1 --> P6_1[TASK-017: Determinism Integration Test]
+    P5_1 --> P6_2[TASK-018: Persistence Fallback Test]
+    P5_1 --> P6_3[TASK-019: LLM Isolation Test]
+    P5_1 --> P7_1[TASK-020: Performance & Memory Audit]
     
-    P6_1 --> P7_1[TASK-020: Performance & Memory Audits]
-    P6_1 --> P8_1[TASK-021: Automated Fitness Function Audit]
-    P7_1 --> P9_1[TASK-022: Final Release Readiness Gate]
-    P8_1 --> P9_1
+    P6_1 --> P8_1[TASK-021: Automated CI Pipeline]
+    P6_2 --> P8_1
+    P6_3 --> P8_1
+    P7_1 --> P8_1
+    
+    P8_1 --> P9_1[TASK-022: Release Documentation & Freeze Tag]
 ```
 
 ### Critical Path Analysis
-- **Primary Critical Path**: `TASK-001` → `TASK-002` → `TASK-003` → `TASK-004` → `TASK-007` → `TASK-008` → `TASK-010` → `TASK-011` → `TASK-016` → `TASK-017` → `TASK-021` → `TASK-022`
-- **Total Critical Path Tasks**: 12 Sequential Tasks.
+- **Primary Critical Path**: `TASK-001` → `TASK-002` → `TASK-003` → `TASK-004` → `TASK-007` → `TASK-009` → `TASK-010` → `TASK-011` → `TASK-012` → `TASK-015` → `TASK-016` → `TASK-017` → `TASK-021` → `TASK-022`
+- **Total Critical Path Tasks**: 14 Sequential Tasks.
 
 ---
 
@@ -63,9 +71,9 @@ graph TD
 
 The following task groups can be executed concurrently by separate work threads once their prerequisites complete:
 
-1. **Parallel Track A (Domain Infrastructure)**: `TASK-004` (FixedPoint) & `TASK-005` (PRNG Engine) after `TASK-003`.
-2. **Parallel Track B (Infrastructure Adapters)**: `TASK-012` (IndexedDB), `TASK-013` (LLM Adapters), and `TASK-014` (PixiJS Renderer) can be built in parallel after `TASK-010` (Port Interfaces) is defined.
-3. **Parallel Track C (Verification Tests)**: `TASK-017` (Determinism), `TASK-018` (Offline), and `TASK-019` (LLM Isolation) can be written in parallel after `TASK-016`.
+1. **Parallel Track A (Domain Entities & PRNG)**: `TASK-004` (FixedPoint), `TASK-005` (PRNG Engine), and `TASK-006` (Region & TurnAction) after `TASK-003`.
+2. **Parallel Track B (Infrastructure Adapters)**: `TASK-012` (IndexedDB after `TASK-011`), `TASK-013` (LLM Adapters), and `TASK-014` (PixiJS Renderer) can be built in parallel after `TASK-010` (DTO Mappers).
+3. **Parallel Track C (Verification & Audits)**: `TASK-017` (Determinism), `TASK-018` (Persistence Fallback), `TASK-019` (LLM Isolation), and `TASK-020` (Performance Audit) after `TASK-016`.
 
 ---
 
@@ -273,29 +281,6 @@ The following task groups can be executed concurrently by separate work threads 
 | **R-02 (Stale LLM Response)** | TASK-013, TASK-019 | Immutable `TurnNumber` validation tag on `LLMNarrative` |
 | **R-03 (Float Precision Drift)** | TASK-004 | Fixed-Point integer resource pool arithmetic (`BigInt`) |
 | **R-04 (Storage Failure)** | TASK-012, TASK-018 | Atomic `.tmp` IndexedDB write + MemoryStorageAdapter fallback |
-
----
-
-## 6. Implementation Confidence & Readiness Verdict
-
-### Quantitative Scorecard
-- **Dependency Ordering Rigor**: 100 / 100
-- **Risk Mitigation Traceability**: 100 / 100
-- **Definition of Done Completeness**: 100 / 100
-- **MVP Scope Integrity**: 100 / 100
-
-```
-===========================================================
-IMPLEMENTATION CONFIDENCE SCORE:
-100 / 100
-
-REMAINING BLOCKERS:
-NONE
-
-FINAL VERDICT:
-READY FOR /speckit.implement
-===========================================================
-```
 
 ---
 *End of Production-Grade Executable Task Breakdown (`tasks.md`)*
