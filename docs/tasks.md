@@ -1,14 +1,16 @@
 # Production-Grade Executable Task Breakdown (`tasks.md`)
 
+> **GOVERNED BY LEVEL 6 SSoT**: [docs/task_registry_lock.md](task_registry_lock.md) (Locked to Exactly 22 Tasks: `TASK-001` through `TASK-022`).
+
 **Project**: Browser-Only Geopolitical Strategy Simulation MVP (El Alamein & Ras El Hekma)  
-**Governing Documents**: [Constitution](constitution.md) | [Architecture Package](architecture_package.md) | [Implementation Plan](implementation_plan_package.md)  
-**Phase Gate**: Task Breakdown Phase (`/speckit.tasks` - Zero Production Code Mode Enforced)
+**Governing Documents**: [Constitution](constitution.md) | [Architecture Index](architecture_index.md) | [Task Registry Lock](task_registry_lock.md)  
+**Phase Gate**: Task Breakdown Phase (`/speckit.tasks`)
 
 ---
 
 ## 1. Executive Summary & Task Overview
 
-This document defines the 28 production-grade executable tasks for building the Geopolitical Strategy Simulation MVP. All tasks are strictly ordered by dependency, categorized across Phases 0 through 9, and include explicit files, acceptance criteria, and Definitions of Done (DoD).
+This document defines the 22 production-grade executable tasks (`TASK-001` through `TASK-022`) for building the Geopolitical Strategy Simulation MVP. All tasks are strictly ordered by dependency, categorized across Phases 0 through 9, and include explicit files, acceptance criteria, and Definitions of Done (DoD).
 
 ---
 
