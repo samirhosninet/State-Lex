@@ -51,8 +51,8 @@ export async function runVerticalSliceE2E(): Promise<string> {
 
     logs.push("Step 2: New Game Initialized at Turn 1");
 
-    logs.push("Step 3: Issue Command (DEVELOP EL_ALAMEIN) & Execute Turn");
-    await page.selectOption('#sel-action', 'DEVELOP');
+    logs.push("Step 3: Issue Command (DEVELOP_MONEY EL_ALAMEIN) & Execute Turn");
+    await page.selectOption('#sel-action', 'DEVELOP_MONEY');
     await page.selectOption('#sel-region', 'EL_ALAMEIN');
     await page.click('#btn-execute');
 
