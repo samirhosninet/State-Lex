@@ -1,5 +1,5 @@
-# Environment and build tools
-.venv/
-spec-kit/
-.vscode/
-desktop.ini
+node_modules
+dist
+.venv
+.vscode
+*.log
