@@ -1,0 +1,5 @@
+# Environment and build tools
+.venv/
+spec-kit/
+.vscode/
+desktop.ini
