@@ -89,8 +89,9 @@ Shadow State is a client-side, browser-only geopolitical strategy simulation MVP
 
 ## 5. Master Architecture Acceptance & Verification Suite
 
+- 🔒 [Final Architecture Closure Verdict](final_architecture_closure_verdict.md) — **ARCHITECTURE FROZEN / GRANTED**
+- 🔍 [Architecture Closure Audit](architecture_closure_audit.md) — Closure Baseline v1.1
 - ⚙️ [Architecture Reconciliation Report](architecture_reconciliation_report.md) — Reconciliation Baseline v1.1
-- 🏆 [Architecture v1.1 Readiness Report](architecture_v1_1_readiness_report.md) — **READY FOR IMPLEMENTATION**
 - 🔒 [Task Registry Lock](task_registry_lock.md) — Exactly 22 Tasks
 - 🎯 [Final Traceability Matrix](final_traceability_matrix.md) — 100% Traceability
 - ✅ [Final Architecture Acceptance Audit](final_architecture_acceptance_audit.md) — Acceptance Audit
