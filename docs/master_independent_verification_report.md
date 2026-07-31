@@ -161,14 +161,14 @@ d:/State-Lex/
 
 | Claim in Documentation | Repository Evidence Location | Evidence Category | Verification Status |
 | :--- | :--- | :--- | :--- |
-| **Constitution Rules & Gates** | [docs/constitution.md:L8-L16](file:///d:/State-Lex/docs/constitution.md#L8-L16) | `VERIFIED` | Verified in Docs |
-| **C4 Diagrams & Hexagonal Design** | [docs/architecture_package.md:L60-L184](file:///d:/State-Lex/docs/architecture_package.md#L60-L184) | `VERIFIED` | Verified in Docs |
-| **22 Executable Tasks with DoD** | [docs/tasks.md:L70-L264](file:///d:/State-Lex/docs/tasks.md#L70-L264) | `VERIFIED` | Verified in Docs |
+| **Constitution Rules & Gates** | [docs/constitution.md:L8-L16](constitution.md#L8-L16) | `VERIFIED` | Verified in Docs |
+| **C4 Diagrams & Hexagonal Design** | [docs/architecture_package.md:L60-L184](architecture_package.md#L60-L184) | `VERIFIED` | Verified in Docs |
+| **22 Executable Tasks with DoD** | [docs/tasks.md:L70-L264](tasks.md#L70-L264) | `VERIFIED` | Verified in Docs |
 | **TypeScript Application Code** | N/A (No source files exist) | `PLANNED` | Pending Phase 1 |
 | **React & PixiJS Canvas Renderer** | N/A (No UI code exists) | `PLANNED` | Pending Phase 3/4 |
-| **IndexedDB Quota Fallback Behavior**| [docs/tasks.md:L163-L170](file:///d:/State-Lex/docs/tasks.md#L163-L170) | `SPECIFIED` | Pending Phase 3 |
-| **Runtime Latency (< 16ms CPU)** | [docs/tasks.md:L236-L242](file:///d:/State-Lex/docs/tasks.md#L236-L242) | `NOT VERIFIED` | Requires Compiled Code |
-| **Cross-Browser Engine Parity** | [docs/tasks.md:L99-L105](file:///d:/State-Lex/docs/tasks.md#L99-L105) | `NOT VERIFIED` | Requires V8/JSC Test |
+| **IndexedDB Quota Fallback Behavior**| [docs/tasks.md:L163-L170](tasks.md#L163-L170) | `SPECIFIED` | Pending Phase 3 |
+| **Runtime Latency (< 16ms CPU)** | [docs/tasks.md:L236-L242](tasks.md#L236-L242) | `NOT VERIFIED` | Requires Compiled Code |
+| **Cross-Browser Engine Parity** | [docs/tasks.md:L99-L105](tasks.md#L99-L105) | `NOT VERIFIED` | Requires V8/JSC Test |
 
 ---
 
@@ -186,10 +186,10 @@ The following operational systems must be implemented during code development:
 
 | Risk ID | Severity | Evidence Location | Likelihood | Impact | Mitigation Task | Residual Risk |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **AR-01** | High | [docs/tasks.md:L81-L87](file:///d:/State-Lex/docs/tasks.md#L81-L87) | Medium | High | `TASK-002` (AST Linter) | Low |
-| **AR-02** | Medium | [docs/tasks.md:L171-L176](file:///d:/State-Lex/docs/tasks.md#L171-L176) | Low | Medium | `TASK-013` (`TurnNumber` Tag)| Low |
-| **AR-03** | Medium | [docs/tasks.md:L99-L105](file:///d:/State-Lex/docs/tasks.md#L99-L105) | Medium | Medium | `TASK-004` (Fixed-Point Math)| Low |
-| **AR-04** | Low | [docs/tasks.md:L163-L170](file:///d:/State-Lex/docs/tasks.md#L163-L170) | Low | Medium | `TASK-012` (Memory Fallback)| Low |
+| **AR-01** | High | [docs/tasks.md:L81-L87](tasks.md#L81-L87) | Medium | High | `TASK-002` (AST Linter) | Low |
+| **AR-02** | Medium | [docs/tasks.md:L171-L176](tasks.md#L171-L176) | Low | Medium | `TASK-013` (`TurnNumber` Tag)| Low |
+| **AR-03** | Medium | [docs/tasks.md:L99-L105](tasks.md#L99-L105) | Medium | Medium | `TASK-004` (Fixed-Point Math)| Low |
+| **AR-04** | Low | [docs/tasks.md:L163-L170](tasks.md#L163-L170) | Low | Medium | `TASK-012` (Memory Fallback)| Low |
 
 ---
 
@@ -214,9 +214,9 @@ The following operational systems must be implemented during code development:
 
 | Conclusion Statement | Evidence Source | Exact File & Line | Reasoning | Confidence |
 | :--- | :--- | :--- | :--- | :--- |
-| **Repository is Documentation-Only** | Directory Audit | [README.md:L7-L9](file:///d:/State-Lex/README.md#L7-L9) | 0 source files exist; declared in README | 100% |
-| **Architecture is Frozen** | Published Docs | [docs/architecture_package.md:L4](file:///d:/State-Lex/docs/architecture_package.md#L4) | Ratified in `architecture_package.md` | 100% |
-| **22 Executable Tasks Specified** | Task Breakdown | [docs/tasks.md:L70-L264](file:///d:/State-Lex/docs/tasks.md#L70-L264) | 22 tasks detailed with DoD | 100% |
+| **Repository is Documentation-Only** | Directory Audit | [README.md:L7-L9](../README.md#L7-L9) | 0 source files exist; declared in README | 100% |
+| **Architecture is Frozen** | Published Docs | [docs/architecture_package.md:L4](architecture_package.md#L4) | Ratified in `architecture_package.md` | 100% |
+| **22 Executable Tasks Specified** | Task Breakdown | [docs/tasks.md:L70-L264](tasks.md#L70-L264) | 22 tasks detailed with DoD | 100% |
 | **Runtime Performance Unverified** | Code Absence | N/A (No source files) | Empirical benchmark requires executable code | 100% |
 
 ---

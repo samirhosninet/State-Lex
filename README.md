@@ -1,6 +1,6 @@
 # Shadow State — Browser-Only Geopolitical Strategy Simulation MVP
 
-[![Architecture Freeze](https://img.shields.io/badge/Architecture-Frozen-blue.svg)](docs/architecture_package.md)
+[![Architecture Freeze](https://img.shields.io/badge/Architecture-Frozen-blue.svg)](docs/architecture_index.md)
 [![Implementation Status](https://img.shields.io/badge/Implementation-Not_Started-red.svg)](docs/tasks.md)
 [![Spec Kit Readiness](https://img.shields.io/badge/Spec_Kit_Readiness-100%2F100-success.svg)](docs/speckit_analysis_report.md)
 
@@ -37,17 +37,19 @@ The system architecture strictly adheres to **Hexagonal (Ports & Adapters) Archi
 
 ---
 
-## 🗺️ Documentation Structure & Artifact Map
+## 🗺️ Documentation Structure & Master Artifact Map
 
-All finalized, ratified architectural and planning documentation is stored in the [`/docs/`](docs/) directory:
+All finalized, ratified architectural and planning documentation is indexed in [`docs/architecture_index.md`](docs/architecture_index.md):
 
 | Document Artifact | Description | Status / Verdict |
 | :--- | :--- | :--- |
-| 📜 [docs/constitution.md](docs/constitution.md) | Governing project principles & Phase Gate directive | Ratified & Active |
+| 📐 [docs/architecture_index.md](docs/architecture_index.md) | Master Architecture Index & Document Map | **Single Source of Truth** |
+| 📜 [docs/constitution.md](docs/constitution.md) | Supreme governing principles & Phase Gate directive | Ratified & Active |
 | 🏛️ [docs/architecture_package.md](docs/architecture_package.md) | Full architectural specification, C4 diagrams & ADRs | Score: 94/100 |
-| 🛡️ [docs/architecture_certification.md](docs/architecture_certification.md) | 20 mandatory architectural reviews & quality gates | PASS WITH RISKS |
-| ⚔️ [docs/architecture_stress_test_audit.md](docs/architecture_stress_test_audit.md) | Adversarial stress test audit, STRIDE & FMEA reports | Score: 95.5/100 |
-| 📋 [docs/implementation_plan_package.md](docs/implementation_plan_package.md) | Technical roadmap, data model, contracts & folder tree | Score: 100/100 |
+| 🔌 [docs/port_contracts.md](docs/port_contracts.md) | Canonical TypeScript Application & Infrastructure Ports | SSoT Interface Contracts |
+| 📖 [docs/glossary.md](docs/glossary.md) | Unified Domain & Technical Terminology Glossary | SSoT Terminology |
+| 🔹 [ADRs (ADR-001 to ADR-005)](docs/adr/) | Standalone Architectural Decision Records | Ratified & Frozen |
+| 📋 [docs/implementation_plan_package.md](docs/implementation_plan_package.md) | Technical roadmap, data model & port contracts | Score: 100/100 |
 | 🚀 [docs/tasks.md](docs/tasks.md) | 22 dependency-ordered executable implementation tasks | Score: 100/100 |
 | 🔍 [docs/speckit_analysis_report.md](docs/speckit_analysis_report.md) | Independent Spec Kit read-only consistency audit | Score: 100/100 |
 | 🔬 [docs/checklist.md](docs/checklist.md) | Spec Kit requirement clarity & completeness checklist | Score: 100/100 |
@@ -55,7 +57,8 @@ All finalized, ratified architectural and planning documentation is stored in th
 | 📊 [docs/github_docs_audit_report.md](docs/github_docs_audit_report.md) | Critical adversarial repository audit & readiness report | Score: 94.7/100 |
 | 🏆 [docs/final_architecture_freeze_certification.md](docs/final_architecture_freeze_certification.md) | Official Architecture Freeze Certification | CERTIFIED AS ARCHITECTURE DOCUMENTATION REPOSITORY |
 | 👑 [docs/github_architecture_freeze_master_audit.md](docs/github_architecture_freeze_master_audit.md) | Master Architecture Freeze Audit Report | CERTIFIED AS ARCHITECTURE DOCUMENTATION REPOSITORY |
-| 🛡️ [docs/master_independent_verification_report.md](docs/master_independent_verification_report.md) | Zero-Trust Independent Verification Audit Report | **READY FOR IMPLEMENTATION** |
+| 🛡️ [docs/master_independent_verification_report.md](docs/master_independent_verification_report.md) | Zero-Trust Independent Verification Audit Report | READY FOR IMPLEMENTATION |
+| ⚙️ [docs/architecture_governance_report.md](docs/architecture_governance_report.md) | Single Source of Truth Governance & Normalization Report | **READY FOR IMPLEMENTATION** |
 
 ---
 
@@ -63,7 +66,7 @@ All finalized, ratified architectural and planning documentation is stored in th
 
 ```
 ===========================================================
-Architecture Status:     FROZEN
+Architecture Status:     FROZEN (Package v1.0.0)
 Planning Status:         COMPLETE
 Tasks Status:            COMPLETE
 Validation Status:       COMPLETE
@@ -78,7 +81,7 @@ Implementation Status:   NOT STARTED
 ### Working Files Report:
 - Local virtual environment `.venv/` and Spec Kit CLI tool `spec-kit/` are preserved for execution.
 - Scripts `specify.bat` and `specify.ps1` exist for local CLI invocation.
-- All 13 architecture documents are published into `/docs/` and synced with `.specify/memory/`.
+- All 18 architecture documents are published into `/docs/` and synced with `.specify/memory/`.
 
 ---
 
@@ -93,9 +96,9 @@ For publishing this architecture freeze documentation package to GitHub:
 2. **Commit Message**:
    ```bash
    git add docs/ README.md .specify/
-   git commit -m "docs: publish finalized architecture and specification package"
+   git commit -m "docs: publish finalized architecture freeze package v1.0.0"
    ```
 3. **Pull Request**: Open a PR to `main` for team review and merge.
 
 ---
-*Shadow State Architecture Package — Ready for Implementation Phase.*
+*Shadow State Architecture Package v1.0.0 — Ready for Implementation Phase.*
