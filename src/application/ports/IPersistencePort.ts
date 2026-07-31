@@ -1,8 +1,6 @@
-export interface SnapshotEnvelopeDTO {
-  readonly schemaVersion: string;
-  readonly state: Record<string, unknown>;
-  readonly stateHash: string;
-}
+import { SnapshotEnvelopeDTO } from '../dtos/Snapshots';
+
+export type { SnapshotEnvelopeDTO };
 
 export interface IPersistencePort {
   saveSnapshot(envelope: SnapshotEnvelopeDTO): Promise<boolean>;
