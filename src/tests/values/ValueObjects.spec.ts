@@ -49,6 +49,15 @@ describe('Value Objects Unit Tests', () => {
     expect(subtracted.baseUnits).toBe(5000n);
     expect(subtracted.toUnits()).toBe(50);
 
+    const multiplied = pool1.multiplyFactor(1.5);
+    expect(multiplied.baseUnits).toBe(15000n);
+    expect(multiplied.toUnits()).toBe(150);
+
+    expect(pool1.toDTO()).toBe('10000n');
+    const restored = FixedPointResourcePool.fromDTO('10000n');
+    expect(restored.equals(pool1)).toBe(true);
+    expect(() => FixedPointResourcePool.fromDTO('invalid')).toThrow();
+
     expect(() => pool2.subtract(pool1)).toThrow(/Insufficient resources/);
     expect(() => new FixedPointResourcePool(-1n)).toThrow();
   });

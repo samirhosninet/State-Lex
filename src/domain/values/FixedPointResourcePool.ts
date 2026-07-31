@@ -36,6 +36,27 @@ export class FixedPointResourcePool {
     return new FixedPointResourcePool(result);
   }
 
+  public multiplyFactor(factor: number): FixedPointResourcePool {
+    if (!Number.isFinite(factor) || factor < 0) {
+      throw new Error(`Invalid multiplication factor: '${factor}'. Must be a non-negative finite number.`);
+    }
+    const scaledFactor = BigInt(Math.floor(factor * 1000));
+    const newBaseUnits = (this._baseUnits * scaledFactor) / 1000n;
+    return new FixedPointResourcePool(newBaseUnits);
+  }
+
+  public toDTO(): string {
+    return `${this._baseUnits.toString()}n`;
+  }
+
+  public static fromDTO(dto: string): FixedPointResourcePool {
+    if (!/^\d+n$/.test(dto)) {
+      throw new Error(`Invalid ResourceSnapshotDTO format: '${dto}'. Expected format e.g. '10000n'.`);
+    }
+    const baseUnits = BigInt(dto.replace('n', ''));
+    return new FixedPointResourcePool(baseUnits);
+  }
+
   public equals(other: FixedPointResourcePool): boolean {
     return this._baseUnits === other._baseUnits;
   }
