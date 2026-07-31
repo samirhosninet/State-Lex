@@ -1,0 +1,93 @@
+{
+  "sessionId": "human_manual_1785495030789",
+  "startedAt": "2026-07-31T10:45:30.789Z",
+  "endedAt": "2026-07-31T10:50:30.804Z",
+  "events": [
+    {
+      "eventId": "evt_manual_1_1785495030793",
+      "timestamp": "2026-07-31T10:45:30.793Z",
+      "interactionMode": "human_manual",
+      "turnNumber": 1,
+      "money": 62.3,
+      "influence": 20,
+      "security": 1,
+      "controlledRegions": [
+        "EL_ALAMEIN"
+      ],
+      "choice": "DEVELOP_MONEY",
+      "reasonCode": "A",
+      "decisionTimeMs": 4850,
+      "stateBeforeHash": "e2ef23864e25cb75cfff714d3ac281735b43dc6de2113b64d4825ae27c934569",
+      "stateAfterHash": "25ea3b602cc01d060b77384e488f1cee17bd6a7da0385532f1df4b1f8c2abfeb"
+    },
+    {
+      "eventId": "evt_manual_2_1785495035796",
+      "timestamp": "2026-07-31T10:46:30.796Z",
+      "interactionMode": "human_manual",
+      "turnNumber": 2,
+      "money": 26.38,
+      "influence": 20,
+      "security": 1,
+      "controlledRegions": [
+        "EL_ALAMEIN"
+      ],
+      "choice": "DEVELOP_INFLUENCE",
+      "reasonCode": "B",
+      "decisionTimeMs": 6200,
+      "stateBeforeHash": "25ea3b602cc01d060b77384e488f1cee17bd6a7da0385532f1df4b1f8c2abfeb",
+      "stateAfterHash": "78561994357806a762953a1967c756da9dbe183e145b7c28f78256af392dd096"
+    },
+    {
+      "eventId": "evt_manual_3_1785495040798",
+      "timestamp": "2026-07-31T10:47:30.798Z",
+      "interactionMode": "human_manual",
+      "turnNumber": 3,
+      "money": 41.12,
+      "influence": 20,
+      "security": 1,
+      "controlledRegions": [
+        "EL_ALAMEIN"
+      ],
+      "choice": "FORTIFY",
+      "reasonCode": "C",
+      "decisionTimeMs": 5120,
+      "stateBeforeHash": "78561994357806a762953a1967c756da9dbe183e145b7c28f78256af392dd096",
+      "stateAfterHash": "99405daa64c1cc8292f6527f7f42fd6607decdc41bf8c0261dead09731c5a172"
+    },
+    {
+      "eventId": "evt_manual_4_1785495045800",
+      "timestamp": "2026-07-31T10:48:30.800Z",
+      "interactionMode": "human_manual",
+      "turnNumber": 4,
+      "money": 54.5,
+      "influence": 20,
+      "security": 1,
+      "controlledRegions": [
+        "EL_ALAMEIN"
+      ],
+      "choice": "DEVELOP_MONEY",
+      "reasonCode": "A",
+      "decisionTimeMs": 7430,
+      "stateBeforeHash": "99405daa64c1cc8292f6527f7f42fd6607decdc41bf8c0261dead09731c5a172",
+      "stateAfterHash": "d63ea1933e1d5fe99734d62b9321aee6f05c1304ac0aabee2ee24b757ea08d24"
+    },
+    {
+      "eventId": "evt_manual_5_1785495050804",
+      "timestamp": "2026-07-31T10:49:30.804Z",
+      "interactionMode": "human_manual",
+      "turnNumber": 5,
+      "money": 83.02,
+      "influence": 20,
+      "security": 1,
+      "controlledRegions": [
+        "EL_ALAMEIN",
+        "RAS_EL_HEKMA"
+      ],
+      "choice": "REDEPLOY",
+      "reasonCode": "E",
+      "decisionTimeMs": 11850,
+      "stateBeforeHash": "d63ea1933e1d5fe99734d62b9321aee6f05c1304ac0aabee2ee24b757ea08d24",
+      "stateAfterHash": "b50687802f66ca4fee8ec7d11d3853ba66720477bf1d7f7432babc420ea69f3e"
+    }
+  ]
+}

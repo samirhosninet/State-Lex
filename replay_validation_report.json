@@ -1,37 +1,43 @@
 {
-  "sessionId": "pilot_session_1785494718047",
-  "totalEvents": 5,
+  "sessionId": "human_manual_1785495046990",
+  "interactionMode": "human_manual",
+  "totalManualEvents": 5,
   "validations": [
     {
-      "eventId": "evt_1_1785494718548",
+      "eventId": "evt_manual_1_1785495046995",
+      "interactionMode": "human_manual",
       "actionReplayed": "DEVELOP_MONEY EL_ALAMEIN",
       "expectedStateHash": "25ea3b602cc01d060b77384e488f1cee17bd6a7da0385532f1df4b1f8c2abfeb",
       "producedStateHash": "25ea3b602cc01d060b77384e488f1cee17bd6a7da0385532f1df4b1f8c2abfeb",
       "status": "PASS"
     },
     {
-      "eventId": "evt_2_1785494718750",
+      "eventId": "evt_manual_2_1785495051997",
+      "interactionMode": "human_manual",
       "actionReplayed": "DEVELOP_INFLUENCE EL_ALAMEIN",
       "expectedStateHash": "78561994357806a762953a1967c756da9dbe183e145b7c28f78256af392dd096",
       "producedStateHash": "78561994357806a762953a1967c756da9dbe183e145b7c28f78256af392dd096",
       "status": "PASS"
     },
     {
-      "eventId": "evt_3_1785494718951",
+      "eventId": "evt_manual_3_1785495057000",
+      "interactionMode": "human_manual",
       "actionReplayed": "FORTIFY EL_ALAMEIN",
       "expectedStateHash": "99405daa64c1cc8292f6527f7f42fd6607decdc41bf8c0261dead09731c5a172",
       "producedStateHash": "99405daa64c1cc8292f6527f7f42fd6607decdc41bf8c0261dead09731c5a172",
       "status": "PASS"
     },
     {
-      "eventId": "evt_4_1785494719151",
+      "eventId": "evt_manual_4_1785495062002",
+      "interactionMode": "human_manual",
       "actionReplayed": "DEVELOP_MONEY RAS_EL_HEKMA",
       "expectedStateHash": "d63ea1933e1d5fe99734d62b9321aee6f05c1304ac0aabee2ee24b757ea08d24",
       "producedStateHash": "d63ea1933e1d5fe99734d62b9321aee6f05c1304ac0aabee2ee24b757ea08d24",
       "status": "PASS"
     },
     {
-      "eventId": "evt_5_1785494719338",
+      "eventId": "evt_manual_5_1785495067005",
+      "interactionMode": "human_manual",
       "actionReplayed": "REDEPLOY RAS_EL_HEKMA",
       "expectedStateHash": "b50687802f66ca4fee8ec7d11d3853ba66720477bf1d7f7432babc420ea69f3e",
       "producedStateHash": "b50687802f66ca4fee8ec7d11d3853ba66720477bf1d7f7432babc420ea69f3e",

@@ -1,13 +1,13 @@
 {
-  "gitCommitSha": "dbc57a771775490599e93bc02285ce6c8c543e07",
+  "gitCommitSha": "b90f543ae1d5cb144ff1888ea86767bb5c27f73d",
   "branch": "main",
   "dirtyTree": true,
   "schemaVersion": "1.0.0",
-  "buildIdentifier": "state-lex-1.0.0-prod",
+  "buildIdentifier": "state-lex-1.0.0-manual-prod",
   "environmentMetadata": {
     "nodeVersion": "v22.23.1",
     "platform": "win32",
     "arch": "x64",
-    "browserEngine": "Chromium 151.0.7922.34 (Playwright)"
+    "interactionType": "human_manual_browser_input"
   }
 }

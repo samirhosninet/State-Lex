@@ -8,17 +8,22 @@ import { IndexedDBStorageAdapter } from '../infrastructure/persistence/IndexedDB
 import { GameStateSnapshotDTO } from '../application/dtos/Snapshots';
 import { computeStateHash } from '../application/services/CanonicalHashService';
 
-export interface HumanPilotTelemetryRecord {
-  readonly playerIndex: number;
+export interface HumanManualTelemetryRecord {
+  readonly eventId: string;
+  readonly timestamp: string;
+  readonly interactionMode: "human_manual";
   readonly turnNumber: number;
   readonly money: number;
   readonly influence: number;
   readonly security: number;
   readonly controlledRegions: string[];
   readonly choice: "DEVELOP_MONEY" | "DEVELOP_INFLUENCE" | "FORTIFY" | "REDEPLOY";
+  readonly targetRegionId: "EL_ALAMEIN" | "RAS_EL_HEKMA";
   readonly reasonCode: "A" | "B" | "C" | "D" | "E";
   readonly reasonText?: string;
   readonly decisionTimeMs: number;
+  readonly stateBeforeHash: string;
+  readonly stateAfterHash: string;
 }
 
 export class GameView {
@@ -28,9 +33,10 @@ export class GameView {
   private readonly _saveGameUseCase: SaveGameUseCase;
   private readonly _loadGameUseCase: LoadGameUseCase;
 
-  private _pilotLogs: HumanPilotTelemetryRecord[] = [];
+  private _sessionId: string = `manual_session_${Date.now()}`;
+  private _sessionStartedAt: string = new Date().toISOString();
+  private _manualLogs: HumanManualTelemetryRecord[] = [];
   private _turnStartTime: number = Date.now();
-  private _currentPlayerIndex: number = 1;
 
   constructor(containerElement: HTMLElement) {
     const persistenceAdapter = new IndexedDBStorageAdapter();
@@ -50,8 +56,8 @@ export class GameView {
       <div style="font-family: system-ui, -apple-system, sans-serif; background: #0f172a; color: #f8fafc; min-height: 100vh; padding: 2rem;">
         <header style="max-width: 1000px; margin: 0 auto 2rem; background: rgba(30, 41, 59, 0.8); padding: 1.5rem; border-radius: 12px; border: 1px solid #334155;">
           <div style="display: flex; justify-content: space-between; align-items: center;">
-            <h1 style="margin: 0; color: #38bdf8; font-size: 1.75rem;">SHADOW STATE — Human Pilot Playtest Mode</h1>
-            <span style="background: #0284c7; color: #fff; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.85rem; font-weight: bold;">Pilot #${this._currentPlayerIndex}</span>
+            <h1 style="margin: 0; color: #38bdf8; font-size: 1.75rem;">SHADOW STATE — Verified Human Manual Pilot Session</h1>
+            <span style="background: #16a34a; color: #fff; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.85rem; font-weight: bold;">Manual Mode</span>
           </div>
           <div style="display: flex; gap: 2rem; font-size: 0.95rem; color: #94a3b8; margin-top: 1rem;">
             <span>Turn: <strong id="lbl-turn" style="color: #f8fafc;">${this._currentSnapshot.turnNumber}</strong></span>
@@ -95,9 +101,9 @@ export class GameView {
               </select>
             </div>
 
-            <!-- Decision Reason Logger Modal/Buttons (Appears on Choice) -->
+            <!-- Decision Reason Logger -->
             <div id="reason-logger" style="background: #0f172a; padding: 1rem; border-radius: 8px; border: 1px solid #0284c7; display: flex; flex-direction: column; gap: 0.75rem;">
-              <div style="font-size: 0.9rem; font-weight: bold; color: #38bdf8;">Select Decision Reason Code:</div>
+              <div style="font-size: 0.9rem; font-weight: bold; color: #38bdf8;">Select Reason Code:</div>
               <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
                 <button class="btn-reason" data-reason="A" style="background: #1e293b; color: #f8fafc; border: 1px solid #475569; padding: 0.5rem; border-radius: 6px; cursor: pointer; text-align: left; font-size: 0.8rem;">A: Need Money</button>
                 <button class="btn-reason" data-reason="B" style="background: #1e293b; color: #f8fafc; border: 1px solid #475569; padding: 0.5rem; border-radius: 6px; cursor: pointer; text-align: left; font-size: 0.8rem;">B: Need Influence</button>
@@ -112,14 +118,15 @@ export class GameView {
 
             <hr style="border-color: #334155; margin: 0.5rem 0; width: 100%;" />
 
-            <div style="display: flex; gap: 0.5rem;">
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
               <button id="btn-new" style="background: #475569; color: #fff; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; flex: 1;">New Game</button>
               <button id="btn-save" style="background: #16a34a; color: #fff; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; flex: 1;">Save</button>
               <button id="btn-load" style="background: #9333ea; color: #fff; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; flex: 1;">Load</button>
+              <button id="btn-export-session" style="background: #eab308; color: #000; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 0.5rem;">Export Human Session JSON</button>
             </div>
 
             <div id="status-banner" style="background: #1e293b; padding: 0.75rem; border-radius: 6px; border: 1px solid #475569; font-size: 0.85rem; color: #38bdf8; min-height: 2.5rem;">
-              Human Pilot session active. Make decision and select Reason Code A-E.
+              Manual mode ready. Click buttons to play and log human decisions.
             </div>
           </section>
         </main>
@@ -169,6 +176,7 @@ export class GameView {
     const btnNew = container.querySelector('#btn-new') as HTMLButtonElement;
     const btnSave = container.querySelector('#btn-save') as HTMLButtonElement;
     const btnLoad = container.querySelector('#btn-load') as HTMLButtonElement;
+    const btnExportSession = container.querySelector('#btn-export-session') as HTMLButtonElement;
     const statusBanner = container.querySelector('#status-banner') as HTMLElement;
     const txtReason = container.querySelector('#txt-reason') as HTMLInputElement;
 
@@ -209,22 +217,7 @@ export class GameView {
       }
 
       const decisionTimeMs = Date.now() - this._turnStartTime;
-
-      // Track Telemetry Record
-      const record: HumanPilotTelemetryRecord = {
-        playerIndex: this._currentPlayerIndex,
-        turnNumber: this._currentSnapshot.turnNumber,
-        money: Number(BigInt(this._currentSnapshot.factions["FACTION_ALPHA"]?.resources.baseUnits.replace('n', '') || "0")) / 100,
-        influence: 20,
-        security: this._currentSnapshot.regions["EL_ALAMEIN"]?.defenseLevel || 1,
-        controlledRegions: Object.keys(this._currentSnapshot.regions).filter(k => this._currentSnapshot.regions[k].controllerFactionId === "FACTION_ALPHA"),
-        choice: choiceType,
-        reasonCode: selectedReasonCode,
-        reasonText: txtReason?.value || "",
-        decisionTimeMs
-      };
-
-      this._pilotLogs.push(record);
+      const stateBeforeHash = computeStateHash(this._currentSnapshot);
 
       const turnResult = this._processTurnUseCase.execute(this._currentSnapshot, {
         actionType,
@@ -232,18 +225,45 @@ export class GameView {
       });
 
       this._currentSnapshot = turnResult.snapshot;
+      const stateAfterHash = turnResult.stateHash;
+
+      // Track Manual Telemetry Record
+      const record: HumanManualTelemetryRecord = {
+        eventId: `evt_manual_${this._currentSnapshot.turnNumber - 1}_${Date.now()}`,
+        timestamp: new Date().toISOString(),
+        interactionMode: "human_manual",
+        turnNumber: this._currentSnapshot.turnNumber - 1,
+        money: Number(BigInt(this._currentSnapshot.factions["FACTION_ALPHA"]?.resources.baseUnits.replace('n', '') || "0")) / 100,
+        influence: 20,
+        security: this._currentSnapshot.regions["EL_ALAMEIN"]?.defenseLevel || 1,
+        controlledRegions: Object.keys(this._currentSnapshot.regions).filter(k => this._currentSnapshot.regions[k].controllerFactionId === "FACTION_ALPHA"),
+        choice: choiceType,
+        targetRegionId,
+        reasonCode: selectedReasonCode,
+        reasonText: txtReason?.value || "",
+        decisionTimeMs,
+        stateBeforeHash,
+        stateAfterHash
+      };
+
+      this._manualLogs.push(record);
+      (window as unknown as Record<string, unknown>).activeHumanManualLogs = this._manualLogs;
+
       this._turnStartTime = Date.now();
       if (txtReason) txtReason.value = '';
 
       this.updateUI(container);
-      statusBanner.textContent = `Turn ${this._currentSnapshot.turnNumber - 1} executed (Choice: ${choiceType}, Reason: ${selectedReasonCode}, Time: ${decisionTimeMs}ms). Hash: ${turnResult.stateHash.substring(0, 16)}...`;
+      statusBanner.textContent = `Turn ${this._currentSnapshot.turnNumber - 1} executed manually. Reason: ${selectedReasonCode}, Time: ${decisionTimeMs}ms. Hash: ${stateAfterHash.substring(0, 16)}...`;
     });
 
     btnNew?.addEventListener('click', () => {
       this._currentSnapshot = this._startGameUseCase.execute();
       this._turnStartTime = Date.now();
+      this._sessionId = `manual_session_${Date.now()}`;
+      this._sessionStartedAt = new Date().toISOString();
+      this._manualLogs = [];
       this.updateUI(container);
-      statusBanner.textContent = `New Game initialized at Turn 1.`;
+      statusBanner.textContent = `New Game initialized at Turn 1. Logs reset.`;
     });
 
     btnSave?.addEventListener('click', async () => {
@@ -267,6 +287,25 @@ export class GameView {
       } else {
         statusBanner.textContent = `No save found.`;
       }
+    });
+
+    btnExportSession?.addEventListener('click', () => {
+      const sessionData = {
+        sessionId: this._sessionId,
+        startedAt: this._sessionStartedAt,
+        endedAt: new Date().toISOString(),
+        events: this._manualLogs
+      };
+
+      const blob = new Blob([JSON.stringify(sessionData, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `human_pilot_session_${this._sessionId}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+
+      statusBanner.textContent = `Exported ${this._manualLogs.length} manual decision events to JSON.`;
     });
   }
 
