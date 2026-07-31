@@ -105,26 +105,48 @@ describe('Mandate M-01 AST Domain Purity Fitness Function', () => {
     });
   });
 
-  describe('Rule Scoping Verification Suite', () => {
-    it('Positive Test: src/domain/... + Math.random() is rejected', () => {
-      const mockDomainPath = path.resolve(process.cwd(), 'src/domain/services/MockService.ts');
-      const mockCode = `export function roll(): number { return Math.random(); }`;
-      const violations = analyzeSourcePurity(mockDomainPath, mockCode);
-      expect(violations).toContain('Math.random() call');
+  describe('Rule Scoping Verification Suite (Mandate M-01 Full Coverage)', () => {
+    const mockDomainPath = path.resolve(process.cwd(), 'src/domain/services/MockService.ts');
+    const mockAppPath = path.resolve(process.cwd(), 'src/application/usecases/MockUseCase.ts');
+
+    // 1. Math.random
+    it('Math.random(): Positive inside src/domain (rejected) & Negative outside (accepted)', () => {
+      const code = `export function roll(): number { return Math.random(); }`;
+      expect(analyzeSourcePurity(mockDomainPath, code)).toContain('Math.random() call');
+      expect(analyzeSourcePurity(mockAppPath, code)).toEqual([]);
     });
 
-    it('Negative Test: src/application/... + Math.random() is accepted (outside domain scope)', () => {
-      const mockAppPath = path.resolve(process.cwd(), 'src/application/usecases/MockUseCase.ts');
-      const mockCode = `export function roll(): number { return Math.random(); }`;
-      const violations = analyzeSourcePurity(mockAppPath, mockCode);
-      expect(violations).toEqual([]);
+    // 2. Date.now
+    it('Date.now(): Positive inside src/domain (rejected) & Negative outside (accepted)', () => {
+      const code = `export function now(): number { return Date.now(); }`;
+      expect(analyzeSourcePurity(mockDomainPath, code)).toContain('Date.now() call');
+      expect(analyzeSourcePurity(mockAppPath, code)).toEqual([]);
     });
 
-    it('Negative Test: src/infrastructure/... + Math.random() is accepted (outside domain scope)', () => {
-      const mockInfraPath = path.resolve(process.cwd(), 'src/infrastructure/adapters/MockAdapter.ts');
-      const mockCode = `export function roll(): number { return Math.random(); }`;
-      const violations = analyzeSourcePurity(mockInfraPath, mockCode);
-      expect(violations).toEqual([]);
+    // 3. new Date()
+    it('new Date(): Positive inside src/domain (rejected) & Negative outside (accepted)', () => {
+      const code = `export function today(): Date { return new Date(); }`;
+      expect(analyzeSourcePurity(mockDomainPath, code)).toContain('new Date() instantiation');
+      expect(analyzeSourcePurity(mockAppPath, code)).toEqual([]);
+    });
+
+    // 4. fetch
+    it('fetch(): Positive inside src/domain (rejected) & Negative outside (accepted)', () => {
+      const code = `export async function loadData() { return fetch('/api'); }`;
+      expect(analyzeSourcePurity(mockDomainPath, code)).toContain("Forbidden global identifier 'fetch'");
+      expect(analyzeSourcePurity(mockAppPath, code)).toEqual([]);
+    });
+
+    // 5. DOM globals (window / document)
+    it('DOM globals (window/document): Positive inside src/domain (rejected) & Negative outside (accepted)', () => {
+      const codeWindow = `export function getWidth() { return window.innerWidth; }`;
+      const codeDoc = `export function getElem() { return document.getElementById('root'); }`;
+
+      expect(analyzeSourcePurity(mockDomainPath, codeWindow)).toContain("DOM/Browser global reference 'window.innerWidth'");
+      expect(analyzeSourcePurity(mockDomainPath, codeDoc)).toContain("DOM/Browser global reference 'document.getElementById'");
+
+      expect(analyzeSourcePurity(mockAppPath, codeWindow)).toEqual([]);
+      expect(analyzeSourcePurity(mockAppPath, codeDoc)).toEqual([]);
     });
   });
 });
