@@ -1,4 +1,11 @@
 # Complete Architecture Package & System Specification
+
+> [!NOTE]
+> ### HISTORICAL ARCHITECTURE SPECIFICATION
+> **THIS DOCUMENT IS HISTORICAL / ARCHIVAL.**
+> **SUPERSEDED BY**: [docs/architecture_index.md](architecture_index.md) (Level 2 SSoT) and [docs/domain_model_specification.md](domain_model_specification.md) (Level 4 SSoT).
+> **FOR ARCHIVAL AND STRUCTURAL REFERENCE PURPOSES ONLY.**
+
 **Project**: Browser-Only Geopolitical Strategy Simulation MVP (Egypt North Coast: El Alamein & Ras El Hekma)  
 **Governing Document**: [Constitution](constitution.md)  
 **Architectural Phase Gate**: Architecture Phase (Zero Production Code Mode)

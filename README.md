@@ -1,12 +1,12 @@
 # Shadow State — Browser-Only Geopolitical Strategy Simulation MVP
 
 [![Architecture Freeze](https://img.shields.io/badge/Architecture-Frozen_v1.1-blue.svg)](docs/architecture_index.md)
-[![Implementation Status](https://img.shields.io/badge/Implementation-Granted-green.svg)](docs/final_architecture_closure_verdict.md)
-[![Spec Kit Readiness](https://img.shields.io/badge/Spec_Kit_Readiness-100%2F100-success.svg)](docs/architecture_v1_1_readiness_report.md)
+[![Implementation Status](https://img.shields.io/badge/Implementation-Granted-green.svg)](docs/final_documentation_normalization_report.md)
+[![Spec Kit Readiness](https://img.shields.io/badge/Spec_Kit_Readiness-100%2F100-success.svg)](docs/final_documentation_normalization_report.md)
 
 > **IMPORTANT DECLARATION**:  
 > **"No production source code has been implemented."**  
-> This repository is currently a **Documentation-Only Architecture Freeze Repository (v1.1 Baseline)**. All specifications, architectural decision records (ADRs), threat models, implementation plans, and executable task breakdowns have been fully ratified, reconciled, and locked prior to code generation.
+> This repository is currently a **Documentation-Only Architecture Freeze Repository (v1.1 Baseline)**. All specifications, architectural decision records (ADRs), threat models, implementation plans, and executable task breakdowns have been fully ratified, reconciled, and normalized prior to code generation.
 
 ---
 
@@ -44,15 +44,14 @@ All finalized, ratified architectural and planning documentation is indexed in [
 | Document Artifact | Description | Status / Verdict |
 | :--- | :--- | :--- |
 | 📐 [docs/architecture_index.md](docs/architecture_index.md) | Master Architecture Index & Document Map | **Single Source of Truth** |
-| 🏆 [docs/final_architecture_closure_verdict.md](docs/final_architecture_closure_verdict.md) | Final Architecture Closure Verdict Report | **ARCHITECTURE FROZEN / GRANTED** |
-| 🔍 [docs/architecture_closure_audit.md](docs/architecture_closure_audit.md) | Architecture Closure Audit Report | **Closure Baseline v1.1** |
-| ⚙️ [docs/architecture_reconciliation_report.md](docs/architecture_reconciliation_report.md) | Architecture Reconciliation Report Baseline v1.1 | **Reconciled v1.1** |
-| 🔒 [docs/task_registry_lock.md](docs/task_registry_lock.md) | Locked Task Registry (Exactly 22 Tasks) | **Locked (22 Tasks)** |
-| 🎯 [docs/final_traceability_matrix.md](docs/final_traceability_matrix.md) | Final Requirements Traceability Matrix | **100% Traceable** |
+| 🏆 [docs/final_documentation_normalization_report.md](docs/final_documentation_normalization_report.md) | Final Documentation Normalization Report | **PASS — APPROVED FOR IMPLEMENTATION** |
+| 🔒 [docs/final_architecture_closure_verdict.md](docs/final_architecture_closure_verdict.md) | Final Architecture Closure Verdict Report | ARCHITECTURE FROZEN / GRANTED |
+| 🔍 [docs/architecture_closure_audit.md](docs/architecture_closure_audit.md) | Architecture Closure Audit Report | Closure Baseline v1.1 |
+| ⚙️ [docs/architecture_reconciliation_report.md](docs/architecture_reconciliation_report.md) | Architecture Reconciliation Report Baseline v1.1 | Reconciled v1.1 |
+| 🔒 [docs/task_registry_lock.md](docs/task_registry_lock.md) | Locked Task Registry (Exactly 22 Tasks) | Locked (22 Tasks) |
+| 🎯 [docs/final_traceability_matrix.md](docs/final_traceability_matrix.md) | Final Requirements Traceability Matrix | 100% Traceable |
 | 📜 [docs/constitution.md](docs/constitution.md) | Supreme governing principles & Phase Gate directive | Ratified & Active |
-| 🏛️ [docs/architecture_package.md](docs/architecture_package.md) | Full architectural specification, C4 diagrams & ADRs | Score: 94/100 |
 | 🔌 [docs/port_contracts.md](docs/port_contracts.md) | Canonical TypeScript Application & Infrastructure Ports | SSoT Interface Contracts |
-| 📖 [docs/glossary.md](docs/glossary.md) | Unified Domain & Technical Terminology Glossary | SSoT Terminology |
 | 🔹 [ADRs (ADR-001 to ADR-005)](docs/adr/) | Standalone Architectural Decision Records | Ratified & Frozen |
 
 ---
@@ -64,7 +63,7 @@ All finalized, ratified architectural and planning documentation is indexed in [
 Architecture Status:     FROZEN (Package Baseline v1.1)
 Planning Status:         COMPLETE
 Tasks Status:            LOCKED (Exactly 22 Tasks)
-Validation Status:       COMPLETE
+Validation Status:       COMPLETE & NORMALIZED
 Implementation Status:   GRANTED (Proceed: TASK-001)
 ===========================================================
 ```
@@ -76,7 +75,7 @@ Implementation Status:   GRANTED (Proceed: TASK-001)
 ### Working Files Report:
 - Local virtual environment `.venv/` and Spec Kit CLI tool `spec-kit/` are preserved for execution.
 - Scripts `specify.bat` and `specify.ps1` exist for local CLI invocation.
-- All 41 architecture documents are published into `/docs/` and synced with `.specify/memory/`.
+- All 42 architecture documents are published into `/docs/` and synced with `.specify/memory/`.
 
 ---
 
@@ -91,7 +90,7 @@ For publishing this architecture freeze documentation package to GitHub:
 2. **Commit Message**:
    ```bash
    git add docs/ README.md .specify/
-   git commit -m "docs: publish final architecture closure verdict v1.1"
+   git commit -m "docs: complete final documentation normalization and architecture closure"
    ```
 3. **Pull Request**: Open a PR to `main` for team review and merge.
 

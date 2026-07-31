@@ -178,7 +178,7 @@ The following task groups can be executed concurrently by separate work threads 
 - **Priority**: P1 | **Dependencies**: TASK-010 | **Complexity**: High | **Risk**: Medium
 - **Target Files**: `src/infrastructure/rendering/PixiJSCanvasAdapter.ts`
 - **Description**: Construct PixiJS 2D canvas map renderer displaying El Alamein & Ras El Hekma region boundaries and ownership colors.
-- **Acceptance Criteria**: Renderer responds to `IRendererPort.renderState()` updates without mutating state models.
+- **Acceptance Criteria**: Renderer responds to `IRendererPort.renderMap()` updates without mutating state models.
 - **Definition of Done**: Visual canvas rendering confirmed in browser.
 
 ---
@@ -257,7 +257,7 @@ The following task groups can be executed concurrently by separate work threads 
 #### TASK-022: Final MVP Release Gate Audit
 - **Priority**: P0 (Blocker) | **Dependencies**: TASK-020, TASK-021 | **Complexity**: Low | **Risk**: Low
 - **Target Files**: `tasks.md`
-- **Description**: Verify all 28 tasks have met Definitions of Done with 0 open blockers.
+- **Description**: Verify all 22 tasks have met Definitions of Done with 0 open blockers.
 - **Acceptance Criteria**: All CI tests green, zero forbidden dependencies, MVP scope verified (2 regions, 2 factions, browser-only).
 - **Definition of Done**: Implementation readiness sign-off completed.
 

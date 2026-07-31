@@ -1,5 +1,11 @@
 # Production-Grade Implementation Plan Package
 
+> [!NOTE]
+> ### HISTORICAL PLANNING SPECIFICATION
+> **THIS DOCUMENT IS HISTORICAL / ARCHIVAL.**
+> **SUPERSEDED BY**: [docs/architecture_index.md](architecture_index.md) (Level 2 SSoT), [docs/port_contracts.md](port_contracts.md) (Level 5 SSoT), and [docs/task_registry_lock.md](task_registry_lock.md) (Level 6 SSoT).
+> **FOR ARCHIVAL PLANNING REFERENCE PURPOSES ONLY.**
+
 **Project**: Browser-Only Geopolitical Strategy Simulation MVP (El Alamein & Ras El Hekma)  
 **Governing Documents**: [Constitution](constitution.md) | [Architecture Package](architecture_package.md) | [Stress Test Audit](architecture_stress_test_audit.md)  
 **Phase Gate**: Implementation Planning Phase (Zero Production Code Mode)  
