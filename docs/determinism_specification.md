@@ -12,6 +12,13 @@ The turn simulation tick is defined as a pure, side-effect-free mathematical tra
 
 ### 1.1 Signature & Types
 ```typescript
+export interface PRNGTraceEntry {
+  readonly location: string;
+  readonly orderIndex: number;
+  readonly purpose: string;
+  readonly value: number;
+}
+
 export interface TurnExecutionInput {
   readonly state: GameStateSnapshotDTO;
   readonly actions: ReadonlyArray<TurnActionDTO>;
@@ -30,6 +37,7 @@ export interface TurnResultMetadataDTO {
   readonly executedActionIds: ReadonlyArray<string>;
   readonly rejectedActionIds: ReadonlyArray<string>;
   readonly prngCallsCount: number;
+  readonly debugTrace?: ReadonlyArray<PRNGTraceEntry>;
 }
 ```
 
@@ -39,12 +47,12 @@ export interface TurnResultMetadataDTO {
 3. **Execution Order**:
    1. Receive and validate command payload DTOs against current state invariants.
    2. Sort validated actions deterministically (alphabetically by `actionId`).
-   3. Initialize PRNG state using deterministic seed derivation: `Math.imul(seed.value, turnNumber.value) >>> 0`.
+   3. Initialize PRNG state using canonical seed derivation: `(TurnSeed.value + TurnNumber.value) >>> 0`.
    4. Resolve action effects sequentially (deducting costs from `FixedPointResourcePool`).
    5. Execute regional simulation tick (resource generation & stability check).
    6. Construct new immutable `GameState` aggregate root.
    7. Increment `TurnNumber` by strictly `+1`.
-   8. Serialize snapshot and compute canonical SHA-256 state hash.
+   8. Execute `canonicalizeDeep(nextState)` and compute canonical SHA-256 state hash.
 
 ---
 
@@ -64,9 +72,10 @@ export function mulberry32(a: number): () => number {
 }
 ```
 
-### 2.2 Seed Derivation & Lifecycle
+### 2.2 Canonical Seed Derivation & Lifecycle
 - Game session begins with a 32-bit `TurnSeed` value object (e.g. `0xDEADBEEF`).
-- For turn $N$, the PRNG generator is initialized via: `seedN = (TurnSeed.value + TurnNumber.value) >>> 0`.
+- For turn $N$, the PRNG generator is initialized using the single canonical derivation formula:
+$$\text{seed}_N = (\text{TurnSeed.value} + \text{TurnNumber.value}) \gg\gg 0$$
 - PRNG instance is created at the start of turn tick and discarded upon turn completion.
 
 ### 2.3 Strict Declared Consumption Sequence
@@ -75,9 +84,15 @@ Random events consume PRNG values in exact, immutable order:
 2. **Region Event Sequence**: Evaluated strictly in canonical region order: `"EL_ALAMEIN"` then `"RAS_EL_HEKMA"`.
 3. **Faction Stability Sequence**: Evaluated strictly in canonical faction order: `"FACTION_ALPHA"` then `"FACTION_BETA"`.
 
-Every PRNG consumption call MUST log: `[LOCATION, ORDER_INDEX, PURPOSE]`.
+Every PRNG consumption call logs an optional `PRNGTraceEntry` containing `[location, orderIndex, purpose, value]`.
 
-### 2.4 Access Prohibition
+### 2.4 Trace Isolation (Zero Side-Effects)
+- `debugTrace` is attached exclusively to `TurnResultMetadataDTO`.
+- `debugTrace` is **EXCLUDED** from `GameState` aggregate root.
+- `debugTrace` and `metadata` are **EXCLUDED** from `stateHash` input calculation (`computeStateHash` consumes `GameStateSnapshotDTO` only).
+- Logging or collecting `debugTrace` must not mutate PRNG state or alter simulation control flow.
+
+### 2.5 Access Prohibition
 The following layers are **EXPLICITLY FORBIDDEN** from accessing or invoking the simulation PRNG:
 - Presentation / React UI Layer (`src/presentation/`)
 - Visual Canvas Renderer (`PixiJSCanvasAdapter`)
@@ -112,22 +127,45 @@ $$\text{GameState}(turn = N) \xrightarrow{\quad \text{ProcessTurn(actions, seed)
 
 ---
 
-## 4. Deterministic Snapshot & Serialization Contract
+## 4. Deterministic Snapshot & Canonical Serialization Contract
 
-### 4.1 Canonical Serialization Rules
-To guarantee state hash identity across all browser JavaScript engines (V8, SpiderMonkey, JavaScriptCore):
-1. **Key Sorting**: Object keys in serialized JSON DTOs MUST be sorted alphabetically.
-2. **Fixed Map Ordering**:
-   - `regions` map entries serialized in exact order: `["EL_ALAMEIN", "RAS_EL_HEKMA"]`.
-   - `factions` map entries serialized in exact order: `["FACTION_ALPHA", "FACTION_BETA"]`.
-3. **BigInt Encoding**: `FixedPointResourcePool.baseUnits` (`bigint`) is converted to explicit string representation (`"10000n"`).
-4. **Float Elimination**: Zero floating-point numbers in domain state DTOs. Integer base units only.
+### 4.1 Deep Canonicalization (`canonicalizeDeep`)
+To guarantee state hash identity across all browser JavaScript engines (V8, SpiderMonkey, JavaScriptCore), snapshot objects MUST pass through `canonicalizeDeep()` prior to JSON stringification:
 
-### 4.2 State Hash Calculation Input
+$$\text{snapshot} \longrightarrow \text{canonicalizeDeep(snapshot)} \longrightarrow \text{JSON.stringify()} \longrightarrow \text{SHA-256}$$
+
+#### Deep Canonicalization Rules:
+1. **Recursive Key Sorting**: All object keys are sorted alphabetically at every nesting level.
+2. **Fixed Map / Collection Ordering**:
+   - `regions` map serialized in exact canonical key order: `["EL_ALAMEIN", "RAS_EL_HEKMA"]`.
+   - `factions` map serialized in exact canonical key order: `["FACTION_ALPHA", "FACTION_BETA"]`.
+3. **Preserved Array Order**: Array elements (e.g. `actionLog`) retain their explicit, deterministic execution sequence.
+4. **BigInt Deterministic Encoding**: `FixedPointResourcePool.baseUnits` (`bigint`) is converted to explicit string representation (`"10000n"`).
+5. **Float Elimination**: Zero floating-point numbers permitted in domain state DTOs. Scaled integer base units only.
+
+### 4.2 State Hash Calculation Pipeline
 ```typescript
+export function canonicalizeDeep(obj: any): any {
+  if (obj === null || typeof obj !== 'object') {
+    if (typeof obj === 'bigint') {
+      return `${obj.toString()}n`;
+    }
+    return obj;
+  }
+  if (Array.isArray(obj)) {
+    return obj.map(canonicalizeDeep);
+  }
+  const sortedKeys = Object.keys(obj).sort();
+  const result: Record<string, any> = {};
+  for (const key of sortedKeys) {
+    result[key] = canonicalizeDeep(obj[key]);
+  }
+  return result;
+}
+
 export function computeStateHash(snapshot: GameStateSnapshotDTO): string {
-  const canonicalJson = JSON.stringify(snapshot, Object.keys(snapshot).sort());
-  // SHA-256 string digest over canonical JSON payload
+  const canonicalSnapshot = canonicalizeDeep(snapshot);
+  const canonicalJson = JSON.stringify(canonicalSnapshot);
   return sha256(canonicalJson);
 }
 ```
@@ -154,9 +192,10 @@ $$\text{Hash}_{\text{Run 1}}(Turn_K) === \text{Hash}_{\text{Run 2}}(Turn_K) \qua
 
 - [x] **TurnEngine Contract**: Formally defined with explicit inputs, outputs, execution order, and error handling.
 - [x] **PRNG Ownership**: `PRNGService` established as sole authoritative owner using Mulberry32 algorithm.
+- [x] **Single Derivation Formula**: `(TurnSeed.value + TurnNumber.value) >>> 0` unified across all sections.
 - [x] **Random Consumption Rules**: Ordered strictly by Action ID -> Region ID -> Faction ID.
-- [x] **State Transition Rules**: Immutable aggregate mutations, structural sharing, and invariant bounds locked.
-- [x] **Snapshot / Hash Contract**: Canonical JSON key sorting and BigInt `"10000n"` encoding defined for 500-turn replay.
+- [x] **Trace Isolation**: `debugTrace` isolated in metadata, excluded from `GameState` and `stateHash`.
+- [x] **Deep Canonicalization**: `canonicalizeDeep` pipeline defined with key sorting, Map ordering, and BigInt string encoding.
 - [x] **Layer Isolation**: Pure domain boundary enforced with zero external dependency leakage.
 
 ---
