@@ -152,6 +152,14 @@ export function canonicalizeDeep(obj: any): any {
     }
     return obj;
   }
+  if (obj instanceof Map) {
+    const sortedKeys = Array.from(obj.keys()).sort();
+    const result: Record<string, any> = {};
+    for (const key of sortedKeys) {
+      result[key] = canonicalizeDeep(obj.get(key));
+    }
+    return result;
+  }
   if (Array.isArray(obj)) {
     return obj.map(canonicalizeDeep);
   }
