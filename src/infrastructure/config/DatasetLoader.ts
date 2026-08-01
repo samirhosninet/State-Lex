@@ -1,6 +1,7 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import { MatrixSchemaData, MatrixSchemaValidator } from '../../domain/services/MatrixSchemaValidator';
+import { ExplanationConfigData } from '../../domain/services/ExplanationConfigTypes';
 
 export interface BalanceConfigData {
   initialTrust: Record<string, number>;
@@ -10,22 +11,6 @@ export interface BalanceConfigData {
     HostileEntry: number;
     HostileExit: number;
   };
-}
-
-export interface ExplanationClassificationRule {
-  id: string;
-  requires: {
-    top_cause_source: string;
-    cause_type: string;
-    dominance_ratio: string;
-    minimum_impact: number;
-  };
-  intensity_rules: Record<string, string>;
-}
-
-export interface ExplanationConfigData {
-  tie_break: string[];
-  classification_rules: ExplanationClassificationRule[];
 }
 
 export class DatasetLoader {
