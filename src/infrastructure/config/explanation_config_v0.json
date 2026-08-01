@@ -1,0 +1,22 @@
+{
+  "tie_break": [
+    "magnitude",
+    "actor_index",
+    "cause_type_index"
+  ],
+  "classification_rules": [
+    {
+      "id": "media_pressure_dominant",
+      "requires": {
+        "top_cause_source": "dominant_causes[0]",
+        "cause_type": "media",
+        "dominance_ratio": ">=0.50",
+        "minimum_impact": 3
+      },
+      "intensity_rules": {
+        "moderate": ">=5",
+        "severe": ">=10"
+      }
+    }
+  ]
+}

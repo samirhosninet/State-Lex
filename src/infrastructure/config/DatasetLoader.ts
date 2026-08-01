@@ -12,6 +12,22 @@ export interface BalanceConfigData {
   };
 }
 
+export interface ExplanationClassificationRule {
+  id: string;
+  requires: {
+    top_cause_source: string;
+    cause_type: string;
+    dominance_ratio: string;
+    minimum_impact: number;
+  };
+  intensity_rules: Record<string, string>;
+}
+
+export interface ExplanationConfigData {
+  tie_break: string[];
+  classification_rules: ExplanationClassificationRule[];
+}
+
 export class DatasetLoader {
   private readonly _configDir: string;
 
@@ -31,5 +47,11 @@ export class DatasetLoader {
     const data = JSON.parse(content) as MatrixSchemaData;
     MatrixSchemaValidator.validate(data);
     return data;
+  }
+
+  public loadExplanationConfig(): ExplanationConfigData {
+    const filePath = join(this._configDir, 'explanation_config_v0.json');
+    const content = readFileSync(filePath, 'utf-8');
+    return JSON.parse(content) as ExplanationConfigData;
   }
 }
