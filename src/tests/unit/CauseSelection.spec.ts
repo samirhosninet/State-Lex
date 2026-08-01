@@ -8,11 +8,24 @@ describe('CauseSelection Layer (Phase 2)', () => {
     classification_rules: []
   };
 
-  // Helper shuffle function (Fisher-Yates) ensuring true random permutations
-  function shuffle<T>(array: ReadonlyArray<T>): T[] {
+  const SHUFFLE_SEED = 42;
+
+  // Deterministic Mulberry32 PRNG helper (SS-002 compatible)
+  function createSeededPRNG(seed: number): () => number {
+    let s = seed >>> 0;
+    return function () {
+      let z = (s += 0x6d2b79f5);
+      z = Math.imul(z ^ (z >>> 15), z | 1);
+      z ^= z + Math.imul(z ^ (z >>> 7), z | 61);
+      return ((z ^ (z >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  // Deterministic Fisher-Yates shuffle consuming seeded PRNG
+  function deterministicShuffle<T>(array: ReadonlyArray<T>, prng: () => number): T[] {
     const arr = [...array];
     for (let i = arr.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
+      const j = Math.floor(prng() * (i + 1));
       [arr[i], arr[j]] = [arr[j], arr[i]];
     }
     return arr;
@@ -99,7 +112,9 @@ describe('CauseSelection Layer (Phase 2)', () => {
     expect(result[0].actor_index).toBe(0);
   });
 
-  it('TEST 7: Input Order Invariance (100 shuffled permutations produce identical dominant_causes output)', () => {
+  it('TEST 7: Input Order Invariance (100 seeded Mulberry32 shuffled permutations produce identical dominant_causes output)', () => {
+    const prng = createSeededPRNG(SHUFFLE_SEED);
+
     const contributors: CausalContributor[] = [
       { actor_index: 2, cause_type_index: 1, cause_type: 'security', impact: -5 },
       { actor_index: 1, cause_type_index: 3, cause_type: 'investors_policy', impact: -5 },
@@ -110,9 +125,13 @@ describe('CauseSelection Layer (Phase 2)', () => {
     const baseline = CauseSelection.selectDominantCauses(contributors, defaultConfig);
 
     for (let i = 0; i < 100; i++) {
-      const shuffledInput = shuffle(contributors);
-      const result = CauseSelection.selectDominantCauses(shuffledInput, defaultConfig);
-      expect(result).toEqual(baseline);
+      const shuffledInput = deterministicShuffle(contributors, prng);
+      try {
+        const result = CauseSelection.selectDominantCauses(shuffledInput, defaultConfig);
+        expect(result).toEqual(baseline);
+      } catch (error) {
+        throw new Error(`TEST 7 Input Order Invariance failed at iteration ${i} using Seed: ${SHUFFLE_SEED}. Error: ${(error as Error).message}`);
+      }
     }
   });
 });
