@@ -86,32 +86,55 @@ export class GSTTurnEngine {
   }
 
   public executeTurn(moveInput: GSTAllocationMoveInput): GSTTurnExecutionResult {
-    if (moveInput.sourceIndex < 0 || moveInput.sourceIndex >= 5 || moveInput.targetIndex < 0 || moveInput.targetIndex >= 5) {
-      throw new Error(`Invalid move input: actor index out of bounds [${moveInput.sourceIndex}, ${moveInput.targetIndex}].`);
+    const src = moveInput ? moveInput.sourceIndex : undefined;
+    const tgt = moveInput ? moveInput.targetIndex : undefined;
+    const amt = moveInput ? moveInput.amount : undefined;
+
+    if (typeof src !== 'number' || !Number.isInteger(src) || src < 0 || src >= 5) {
+      throw new Error(`Invalid move input: sourceIndex must be an integer between 0 and 4. Got: ${src}.`);
     }
 
-    if (moveInput.amount < 0 || this._allocationVector[moveInput.sourceIndex] < moveInput.amount) {
-      throw new Error(`Invalid move input: amount ${moveInput.amount} exceeds source allocation ${this._allocationVector[moveInput.sourceIndex]}.`);
+    if (typeof tgt !== 'number' || !Number.isInteger(tgt) || tgt < 0 || tgt >= 5) {
+      throw new Error(`Invalid move input: targetIndex must be an integer between 0 and 4. Got: ${tgt}.`);
     }
 
+    if (typeof amt !== 'number' || !Number.isFinite(amt) || amt < 0) {
+      throw new Error(`Invalid move input: amount must be a finite non-negative number. Got: ${amt}.`);
+    }
+
+    if (this._allocationVector[src] < amt) {
+      throw new Error(`Invalid move input: amount ${amt} exceeds source allocation ${this._allocationVector[src]}.`);
+    }
+
+    // Atomicity: Clone allocation vector into workspace before performing any mutation
     const allocationBefore = [...this._allocationVector];
+    const nextAllocation = [...this._allocationVector];
     const trustStatesBefore = this.trustStates;
 
-    this._allocationVector[moveInput.sourceIndex] -= moveInput.amount;
-    this._allocationVector[moveInput.targetIndex] += moveInput.amount;
+    nextAllocation[src] -= amt;
+    nextAllocation[tgt] += amt;
 
-    const sum = this._allocationVector.reduce((a, b) => a + b, 0);
+    const sum = nextAllocation.reduce((a, b) => a + b, 0);
     if (sum !== 100) {
       throw new Error(`Allocation sum invariant breached: expected 100, got ${sum}.`);
     }
 
-    const allocationAfter = [...this._allocationVector];
-    const rawDeltas = this._influenceMatrix.computeTrustDeltas(allocationAfter);
+    // Compute deltas and update temporary trust states
+    const rawDeltas = this._influenceMatrix.computeTrustDeltas(nextAllocation);
+
+    // Execute update on trust components (will be reverted if worldChanges/consequences fail)
     const trustStatesAfter = this._trustComponents.map((tc, idx) => tc.updateScore(rawDeltas[idx]));
     const internalScoresAfter = this.internalScores;
 
     const worldChanges = this._mutationScheduler.evaluateStep6(this._turnNumber, this._influenceMatrix);
     const consequences = this._neglectTracker.evaluateStep7(this._turnNumber, trustStatesAfter);
+
+    // Commit workspace allocation vector to canonical engine state
+    for (let i = 0; i < 5; i++) {
+      this._allocationVector[i] = nextAllocation[i];
+    }
+
+    const allocationAfter = [...this._allocationVector];
 
     const result: GSTTurnExecutionResult = {
       turnNumber: this._turnNumber,
