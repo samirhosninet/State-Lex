@@ -73,6 +73,18 @@ export class GSTTurnEngine {
     return this._trustComponents.map(tc => tc.internalScore);
   }
 
+  public rehydrateState(turnNumber: number, allocation: number[], internalScores?: number[]): void {
+    this._turnNumber = turnNumber;
+    for (let i = 0; i < 5; i++) {
+      if (allocation && typeof allocation[i] === 'number') {
+        this._allocationVector[i] = allocation[i];
+      }
+      if (internalScores && typeof internalScores[i] === 'number') {
+        this._trustComponents[i].setScore(internalScores[i]);
+      }
+    }
+  }
+
   public executeTurn(moveInput: GSTAllocationMoveInput): GSTTurnExecutionResult {
     if (moveInput.sourceIndex < 0 || moveInput.sourceIndex >= 5 || moveInput.targetIndex < 0 || moveInput.targetIndex >= 5) {
       throw new Error(`Invalid move input: actor index out of bounds [${moveInput.sourceIndex}, ${moveInput.targetIndex}].`);

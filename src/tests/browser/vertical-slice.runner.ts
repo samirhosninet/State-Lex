@@ -51,9 +51,9 @@ export async function runVerticalSliceE2E(): Promise<string> {
 
     logs.push("Step 2: New Game Initialized at Turn 1");
 
-    logs.push("Step 3: Issue Command (DEVELOP_MONEY EL_ALAMEIN) & Execute Turn");
-    await page.selectOption('#sel-action', 'DEVELOP_MONEY');
-    await page.selectOption('#sel-region', 'EL_ALAMEIN');
+    logs.push("Step 3: Issue Command (Transfer 5 from Media [4] to StateAdmin [0]) & Execute Turn");
+    await page.selectOption('#sel-action', '4');
+    await page.selectOption('#sel-region', '0');
     await page.click('#btn-execute');
 
     const turnAfterExecute = await page.textContent('#lbl-turn');
@@ -80,8 +80,8 @@ export async function runVerticalSliceE2E(): Promise<string> {
     logs.push(`Banner: ${loadedBanner?.trim()}`);
 
     logs.push("Step 7: Continue Playing (Execute Turn 2)");
-    await page.selectOption('#sel-action', 'FORTIFY');
-    await page.selectOption('#sel-region', 'EL_ALAMEIN');
+    await page.selectOption('#sel-action', '1');
+    await page.selectOption('#sel-region', '2');
     await page.click('#btn-execute');
 
     const finalTurn = await page.textContent('#lbl-turn');

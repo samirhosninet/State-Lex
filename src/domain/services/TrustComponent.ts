@@ -37,6 +37,14 @@ export class TrustComponent {
   }
 
   /**
+   * Explicitly sets internal score and updates visible hysteresis state.
+   */
+  public setScore(score: number): void {
+    this._internalScore = DeterministicMath.clampTrustScore(score);
+    this._visibleState = this.evaluateState(this._internalScore, this._visibleState);
+  }
+
+  /**
    * Hysteresis evaluation logic preventing flicker at state boundaries.
    */
   private evaluateState(score: number, currentState: TrustState): TrustState {

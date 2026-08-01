@@ -1,9 +1,5 @@
-import { createInitialGameState } from './domain/services/InitialGameStateFactory';
-import { TurnEngine } from './domain/services/TurnEngine';
-import { TurnAction } from './domain/entities/TurnAction';
-import { FactionId } from './domain/values/FactionId';
-import { RegionId } from './domain/values/RegionId';
-import { TurnNumber } from './domain/values/TurnNumber';
+import { GSTTurnEngine } from './domain/services/TurnEngine';
+import { DatasetLoader } from './infrastructure/config/DatasetLoader';
 import { GameStateMapper } from './application/mappers/GameStateMapper';
 import { computeStateHash } from './application/services/CanonicalHashService';
 import { SnapshotEnvelopeDTO } from './application/dtos/Snapshots';
@@ -20,14 +16,15 @@ export interface ChromiumTestResult {
 }
 
 export async function runRoundTripIdentityTest(): Promise<ChromiumTestResult> {
-  const initialState = createInitialGameState("game-001", 123456789);
-  const action1 = new TurnAction("act-1", new FactionId("FACTION_ALPHA"), new RegionId("EL_ALAMEIN"), "DEVELOP", new TurnNumber(1));
-  const action2 = new TurnAction("act-2", new FactionId("FACTION_BETA"), new RegionId("RAS_EL_HEKMA"), "FORTIFY", new TurnNumber(1));
+  const loader = new DatasetLoader();
+  const balanceConfig = loader.loadBalanceConfig();
+  const matrixData = loader.loadInfluenceMatrix();
 
-  const turnResult = TurnEngine.tick(initialState, [action1, action2]);
-  const originalState = turnResult.newState;
+  const engine = new GSTTurnEngine(balanceConfig, matrixData);
+  // Execute test allocation move (5 from Media [4] to StateAdmin [0])
+  engine.executeTurn({ sourceIndex: 4, targetIndex: 0, amount: 5 });
 
-  const originalSnapshotDTO = GameStateMapper.toSnapshot(originalState);
+  const originalSnapshotDTO = GameStateMapper.toGSTSnapshot(engine);
   const originalHash = computeStateHash(originalSnapshotDTO);
 
   const envelope: SnapshotEnvelopeDTO = {
@@ -46,8 +43,8 @@ export async function runRoundTripIdentityTest(): Promise<ChromiumTestResult> {
   }
   const persistedHash = loadedEnvelope.stateHash;
 
-  const rehydratedState = GameStateMapper.fromSnapshot(loadedEnvelope.state);
-  const rehydratedSnapshotDTO = GameStateMapper.toSnapshot(rehydratedState);
+  const rehydratedEngine = GameStateMapper.fromGSTSnapshot(loadedEnvelope.state, balanceConfig, matrixData);
+  const rehydratedSnapshotDTO = GameStateMapper.toGSTSnapshot(rehydratedEngine);
   const rehydratedHash = computeStateHash(rehydratedSnapshotDTO);
 
   return {

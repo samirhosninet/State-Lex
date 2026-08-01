@@ -19,7 +19,7 @@ export function validateManualSessionFile(sessionFilePath: string): void {
   };
 
   const processTurnUseCase = new ProcessTurnUseCase();
-  let replaySnapshot = new StartGameUseCase().execute("game-001", 123456789);
+  let replaySnapshot = new StartGameUseCase().execute();
   const replayValidations: { eventId: string; interactionMode: string; actionReplayed: string; expectedStateHash: string; producedStateHash: string; status: "PASS" | "FAIL" }[] = [];
 
   for (const evt of sessionData.events) {

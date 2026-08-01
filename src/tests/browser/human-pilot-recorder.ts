@@ -77,7 +77,7 @@ export async function captureHumanPilotSession(): Promise<void> {
     ];
 
     const processTurnUseCase = new ProcessTurnUseCase();
-    let currentSnapshot = new StartGameUseCase().execute("game-001", 123456789);
+    let currentSnapshot = new StartGameUseCase().execute();
 
     for (let i = 0; i < userClickSteps.length; i++) {
       const step = userClickSteps[i];
@@ -144,7 +144,7 @@ export async function captureHumanPilotSession(): Promise<void> {
 
   // 2. Perform Replay Validation (ProcessTurnUseCase.execute(snapshot, input) == stateAfterHash)
   const processTurnUseCase = new ProcessTurnUseCase();
-  let replaySnapshot = new StartGameUseCase().execute("game-001", 123456789);
+  let replaySnapshot = new StartGameUseCase().execute();
   const replayValidations: { eventId: string; actionReplayed: string; expectedStateHash: string; producedStateHash: string; status: "PASS" | "FAIL" }[] = [];
 
   for (const evt of events) {
