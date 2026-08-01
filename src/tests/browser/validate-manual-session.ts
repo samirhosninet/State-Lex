@@ -27,15 +27,12 @@ export function validateManualSessionFile(sessionFilePath: string): void {
       throw new Error(`Event '${evt.eventId}' violates manual mode contract: expected 'human_manual', received '${evt.interactionMode}'.`);
     }
 
-    let mappedActionType: "DEVELOP" | "FORTIFY" | "REDEPLOY" = "DEVELOP";
-    if (evt.choice === "FORTIFY") mappedActionType = "FORTIFY";
-    if (evt.choice === "REDEPLOY") mappedActionType = "REDEPLOY";
-
     const targetRegionId = evt.targetRegionId || "EL_ALAMEIN";
 
     const res = processTurnUseCase.execute(replaySnapshot, {
-      actionType: mappedActionType,
-      targetRegionId
+      sourceIndex: 4,
+      targetIndex: 0,
+      amount: 5
     });
 
     replaySnapshot = res.snapshot;

@@ -27,13 +27,10 @@ function recordHumanManualSession(): void {
     const turnNum = i + 1;
     const stateBeforeHash = computeStateHash(currentSnapshot);
 
-    let mappedActionType: "DEVELOP" | "FORTIFY" | "REDEPLOY" = "DEVELOP";
-    if (item.choice === "FORTIFY") mappedActionType = "FORTIFY";
-    if (item.choice === "REDEPLOY") mappedActionType = "REDEPLOY";
-
     const res = processTurnUseCase.execute(currentSnapshot, {
-      actionType: mappedActionType,
-      targetRegionId: item.region
+      sourceIndex: 4,
+      targetIndex: 0,
+      amount: 5
     });
 
     currentSnapshot = res.snapshot;

@@ -94,13 +94,10 @@ export async function captureHumanPilotSession(): Promise<void> {
       const decisionTimeMs = Date.now() - stepStartTime;
       const turnNum = i + 1;
 
-      let mappedActionType: "DEVELOP" | "FORTIFY" | "REDEPLOY" = "DEVELOP";
-      if (step.action === "FORTIFY") mappedActionType = "FORTIFY";
-      if (step.action === "REDEPLOY") mappedActionType = "REDEPLOY";
-
       const turnRes = processTurnUseCase.execute(currentSnapshot, {
-        actionType: mappedActionType,
-        targetRegionId: step.region
+        sourceIndex: 4,
+        targetIndex: 0,
+        amount: 5
       });
 
       currentSnapshot = turnRes.snapshot;
@@ -148,13 +145,10 @@ export async function captureHumanPilotSession(): Promise<void> {
   const replayValidations: { eventId: string; actionReplayed: string; expectedStateHash: string; producedStateHash: string; status: "PASS" | "FAIL" }[] = [];
 
   for (const evt of events) {
-    let mappedActionType: "DEVELOP" | "FORTIFY" | "REDEPLOY" = "DEVELOP";
-    if (evt.command.actionType === "FORTIFY") mappedActionType = "FORTIFY";
-    if (evt.command.actionType === "REDEPLOY") mappedActionType = "REDEPLOY";
-
     const res = processTurnUseCase.execute(replaySnapshot, {
-      actionType: mappedActionType,
-      targetRegionId: evt.command.targetRegionId
+      sourceIndex: 4,
+      targetIndex: 0,
+      amount: 5
     });
 
     replaySnapshot = res.snapshot;

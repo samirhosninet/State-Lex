@@ -15,7 +15,7 @@ export interface ProcessTurnResponse {
   readonly stateHash: string;
 }
 
-export type ProcessTurnInput = GSTAllocationMoveInput | { actionType?: string; targetRegionId?: string } | null;
+export type ProcessTurnInput = GSTAllocationMoveInput | Record<string, unknown> | null;
 
 export class ProcessTurnUseCase {
   public execute(
@@ -31,20 +31,26 @@ export class ProcessTurnUseCase {
 
     let lastMoveDTO;
     if (moveInput) {
-      if ('sourceIndex' in moveInput && 'targetIndex' in moveInput && typeof moveInput.sourceIndex === 'number') {
-        const gstMove: GSTAllocationMoveInput = {
-          sourceIndex: moveInput.sourceIndex,
-          targetIndex: moveInput.targetIndex,
-          amount: typeof moveInput.amount === 'number' ? moveInput.amount : 5
-        };
-        engine.executeTurn(gstMove);
-        lastMoveDTO = gstMove;
-      } else {
-        // Default GST allocation move for legacy callers
-        const defaultMove: GSTAllocationMoveInput = { sourceIndex: 4, targetIndex: 0, amount: 5 };
-        engine.executeTurn(defaultMove);
-        lastMoveDTO = defaultMove;
+      const src = (moveInput as Record<string, unknown>).sourceIndex;
+      const tgt = (moveInput as Record<string, unknown>).targetIndex;
+
+      if (typeof src !== 'number' || !Number.isFinite(src) || typeof tgt !== 'number' || !Number.isFinite(tgt)) {
+        throw new Error(
+          "Invalid ProcessTurnInput: expected GSTAllocationMoveInput with finite numeric sourceIndex and targetIndex. Legacy action-based payloads are not supported by the GST runtime."
+        );
       }
+
+      const amtRaw = (moveInput as Record<string, unknown>).amount;
+      const amt = typeof amtRaw === 'number' && Number.isFinite(amtRaw) ? amtRaw : 5;
+
+      const gstMove: GSTAllocationMoveInput = {
+        sourceIndex: src,
+        targetIndex: tgt,
+        amount: amt
+      };
+
+      engine.executeTurn(gstMove);
+      lastMoveDTO = gstMove;
     }
 
     const matrix = new InfluenceMatrix(matrixData);
