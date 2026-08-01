@@ -8,6 +8,16 @@ describe('CauseSelection Layer (Phase 2)', () => {
     classification_rules: []
   };
 
+  // Helper shuffle function (Fisher-Yates) ensuring true random permutations
+  function shuffle<T>(array: ReadonlyArray<T>): T[] {
+    const arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
   it('TEST 1: Deterministic ordering (identical inputs produce identical dominant_causes)', () => {
     const contributors: CausalContributor[] = [
       { actor_index: 2, cause_type_index: 1, cause_type: 'security', impact: -3 },
@@ -66,17 +76,14 @@ describe('CauseSelection Layer (Phase 2)', () => {
       { actor_index: 1, cause_type_index: 0, cause_type: 'investors', impact: -2 }
     ];
 
-    // Under default config (magnitude first), media (-10) wins
     const defaultResult = CauseSelection.selectDominantCauses(contributors, defaultConfig);
     expect(defaultResult[0].cause_type).toBe('media');
 
-    // Under custom config (actor_index first), investors (actor 1) wins over media (actor 4)
     const customResult = CauseSelection.selectDominantCauses(contributors, customConfig);
     expect(customResult[0].cause_type).toBe('investors');
   });
 
   it('TEST 6: Zero schema whitelist validation inside CauseSelection', () => {
-    // CauseSelection treats injected config as trusted input from DatasetLoader
     const customConfig: ExplanationConfigData = {
       tie_break: ["actor_index"],
       classification_rules: []
@@ -90,5 +97,22 @@ describe('CauseSelection Layer (Phase 2)', () => {
     expect(() => CauseSelection.selectDominantCauses(contributors, customConfig)).not.toThrow();
     const result = CauseSelection.selectDominantCauses(contributors, customConfig);
     expect(result[0].actor_index).toBe(0);
+  });
+
+  it('TEST 7: Input Order Invariance (100 shuffled permutations produce identical dominant_causes output)', () => {
+    const contributors: CausalContributor[] = [
+      { actor_index: 2, cause_type_index: 1, cause_type: 'security', impact: -5 },
+      { actor_index: 1, cause_type_index: 3, cause_type: 'investors_policy', impact: -5 },
+      { actor_index: 4, cause_type_index: 0, cause_type: 'media', impact: -3 },
+      { actor_index: 1, cause_type_index: 0, cause_type: 'investors_capital', impact: -5 }
+    ];
+
+    const baseline = CauseSelection.selectDominantCauses(contributors, defaultConfig);
+
+    for (let i = 0; i < 100; i++) {
+      const shuffledInput = shuffle(contributors);
+      const result = CauseSelection.selectDominantCauses(shuffledInput, defaultConfig);
+      expect(result).toEqual(baseline);
+    }
   });
 });
