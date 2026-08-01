@@ -1,0 +1,298 @@
+{
+  "scenario_id": "GST-03b",
+  "state_origin": "POST_MUTATION_S1",
+  "mutation_source": "GST-02",
+  "replay_turns": false,
+  "records": [
+    {
+      "session_seed": "GST03B-S1-SEED",
+      "turn_number": 1,
+      "allocation_before": {
+        "stateAdministration": 20,
+        "investors": 20,
+        "securityEstablishment": 20,
+        "localCommunities": 20,
+        "media": 20
+      },
+      "allocation_after": {
+        "stateAdministration": 40,
+        "investors": 20,
+        "securityEstablishment": 20,
+        "localCommunities": 20,
+        "media": 0
+      },
+      "allocation_delta": {
+        "source": "Media",
+        "target": "StateAdministration",
+        "amount": 20
+      },
+      "trust_states_before": [
+        {
+          "actor": "StateAdministration",
+          "state": "Healthy"
+        },
+        {
+          "actor": "Investors",
+          "state": "Healthy"
+        },
+        {
+          "actor": "SecurityEstablishment",
+          "state": "Healthy"
+        },
+        {
+          "actor": "LocalCommunities",
+          "state": "Healthy"
+        },
+        {
+          "actor": "Media",
+          "state": "Healthy"
+        }
+      ],
+      "trust_states_after": [
+        {
+          "actor": "StateAdministration",
+          "state": "Healthy"
+        },
+        {
+          "actor": "Investors",
+          "state": "Healthy"
+        },
+        {
+          "actor": "SecurityEstablishment",
+          "state": "Healthy"
+        },
+        {
+          "actor": "LocalCommunities",
+          "state": "Unstable"
+        },
+        {
+          "actor": "Media",
+          "state": "Healthy"
+        }
+      ],
+      "rule_mutation_triggered": false,
+      "world_changes": [],
+      "consequences": [],
+      "time_to_decision": 5000
+    },
+    {
+      "session_seed": "GST03B-S1-SEED",
+      "turn_number": 2,
+      "allocation_before": {
+        "stateAdministration": 40,
+        "investors": 20,
+        "securityEstablishment": 20,
+        "localCommunities": 20,
+        "media": 0
+      },
+      "allocation_after": {
+        "stateAdministration": 40,
+        "investors": 15,
+        "securityEstablishment": 25,
+        "localCommunities": 20,
+        "media": 0
+      },
+      "allocation_delta": {
+        "source": "Investors",
+        "target": "SecurityEstablishment",
+        "amount": 5
+      },
+      "trust_states_before": [
+        {
+          "actor": "StateAdministration",
+          "state": "Healthy"
+        },
+        {
+          "actor": "Investors",
+          "state": "Healthy"
+        },
+        {
+          "actor": "SecurityEstablishment",
+          "state": "Healthy"
+        },
+        {
+          "actor": "LocalCommunities",
+          "state": "Unstable"
+        },
+        {
+          "actor": "Media",
+          "state": "Healthy"
+        }
+      ],
+      "trust_states_after": [
+        {
+          "actor": "StateAdministration",
+          "state": "Healthy"
+        },
+        {
+          "actor": "Investors",
+          "state": "Healthy"
+        },
+        {
+          "actor": "SecurityEstablishment",
+          "state": "Healthy"
+        },
+        {
+          "actor": "LocalCommunities",
+          "state": "Hostile"
+        },
+        {
+          "actor": "Media",
+          "state": "Healthy"
+        }
+      ],
+      "rule_mutation_triggered": false,
+      "world_changes": [],
+      "consequences": [],
+      "time_to_decision": 5000
+    },
+    {
+      "session_seed": "GST03B-S1-SEED",
+      "turn_number": 3,
+      "allocation_before": {
+        "stateAdministration": 40,
+        "investors": 15,
+        "securityEstablishment": 25,
+        "localCommunities": 20,
+        "media": 0
+      },
+      "allocation_after": {
+        "stateAdministration": 40,
+        "investors": 15,
+        "securityEstablishment": 20,
+        "localCommunities": 25,
+        "media": 0
+      },
+      "allocation_delta": {
+        "source": "SecurityEstablishment",
+        "target": "LocalCommunities",
+        "amount": 5
+      },
+      "trust_states_before": [
+        {
+          "actor": "StateAdministration",
+          "state": "Healthy"
+        },
+        {
+          "actor": "Investors",
+          "state": "Healthy"
+        },
+        {
+          "actor": "SecurityEstablishment",
+          "state": "Healthy"
+        },
+        {
+          "actor": "LocalCommunities",
+          "state": "Hostile"
+        },
+        {
+          "actor": "Media",
+          "state": "Healthy"
+        }
+      ],
+      "trust_states_after": [
+        {
+          "actor": "StateAdministration",
+          "state": "Healthy"
+        },
+        {
+          "actor": "Investors",
+          "state": "Healthy"
+        },
+        {
+          "actor": "SecurityEstablishment",
+          "state": "Healthy"
+        },
+        {
+          "actor": "LocalCommunities",
+          "state": "Hostile"
+        },
+        {
+          "actor": "Media",
+          "state": "Healthy"
+        }
+      ],
+      "rule_mutation_triggered": false,
+      "world_changes": [],
+      "consequences": [
+        {
+          "turn": 3,
+          "actor": "LocalCommunities",
+          "eventId": "evt_neglect_actor_3"
+        }
+      ],
+      "time_to_decision": 5000
+    },
+    {
+      "session_seed": "GST03B-S1-SEED",
+      "turn_number": 4,
+      "allocation_before": {
+        "stateAdministration": 40,
+        "investors": 15,
+        "securityEstablishment": 20,
+        "localCommunities": 25,
+        "media": 0
+      },
+      "allocation_after": {
+        "stateAdministration": 45,
+        "investors": 15,
+        "securityEstablishment": 20,
+        "localCommunities": 20,
+        "media": 0
+      },
+      "allocation_delta": {
+        "source": "LocalCommunities",
+        "target": "StateAdministration",
+        "amount": 5
+      },
+      "trust_states_before": [
+        {
+          "actor": "StateAdministration",
+          "state": "Healthy"
+        },
+        {
+          "actor": "Investors",
+          "state": "Healthy"
+        },
+        {
+          "actor": "SecurityEstablishment",
+          "state": "Healthy"
+        },
+        {
+          "actor": "LocalCommunities",
+          "state": "Hostile"
+        },
+        {
+          "actor": "Media",
+          "state": "Healthy"
+        }
+      ],
+      "trust_states_after": [
+        {
+          "actor": "StateAdministration",
+          "state": "Healthy"
+        },
+        {
+          "actor": "Investors",
+          "state": "Healthy"
+        },
+        {
+          "actor": "SecurityEstablishment",
+          "state": "Healthy"
+        },
+        {
+          "actor": "LocalCommunities",
+          "state": "Hostile"
+        },
+        {
+          "actor": "Media",
+          "state": "Healthy"
+        }
+      ],
+      "rule_mutation_triggered": false,
+      "world_changes": [],
+      "consequences": [],
+      "time_to_decision": 5000
+    }
+  ]
+}

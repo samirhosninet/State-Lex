@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { DatasetLoader } from '../../infrastructure/config/DatasetLoader';
-import { MatrixSchemaValidator } from '../../domain/services/MatrixSchemaValidator';
+import { MatrixSchemaValidator, MatrixSchemaData } from '../../domain/services/MatrixSchemaValidator';
 
 describe('DatasetLoader & MatrixSchemaValidator (Phase 1)', () => {
   it('loads valid balance_config_v0.json and influence_matrix_v0.json datasets', () => {
