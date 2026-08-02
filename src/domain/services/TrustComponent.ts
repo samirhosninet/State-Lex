@@ -7,6 +7,11 @@ export enum TrustState {
   Hostile = "Hostile"
 }
 
+export interface TrustTransitionResult {
+  readonly score: number;
+  readonly state: TrustState;
+}
+
 export class TrustComponent {
   private _internalScore: number;
   private _visibleState: TrustState;
@@ -27,13 +32,46 @@ export class TrustComponent {
   }
 
   /**
-   * Updates internal score with delta, applies clamp [0, 100], and evaluates hysteresis state transitions.
+   * Shared transition calculation routine (D-3 / AC-3b).
+   * Computes the new clamped score and visible state without mutating instance state.
+   */
+  private computeTransition(delta: number): TrustTransitionResult {
+    const rawScore = this._internalScore + delta;
+    const score = DeterministicMath.clampTrustScore(rawScore);
+    const state = this.evaluateState(score, this._visibleState);
+    return { score, state };
+  }
+
+  /**
+   * Non-mutating preview of trust transition (CTR-C / CTR-E).
+   * MUST NOT modify any observable or internal state of the TrustComponent instance.
+   */
+  public previewTransition(delta: number): TrustTransitionResult {
+    return this.computeTransition(delta);
+  }
+
+  /**
+   * Non-mutating preview returning only TrustState (CTR-E / AC-3a).
+   */
+  public previewUpdate(delta: number): TrustState {
+    return this.computeTransition(delta).state;
+  }
+
+  /**
+   * Updates internal score with delta and evaluates hysteresis state transitions.
    */
   public updateScore(delta: number): TrustState {
-    const rawScore = this._internalScore + delta;
-    this._internalScore = DeterministicMath.clampTrustScore(rawScore);
-    this._visibleState = this.evaluateState(this._internalScore, this._visibleState);
-    return this._visibleState;
+    const { score, state } = this.computeTransition(delta);
+    this.commitTransition(score, state);
+    return state;
+  }
+
+  /**
+   * Commits precomputed transition into instance state without recomputation (Commit-Safe).
+   */
+  public commitTransition(score: number, state: TrustState): void {
+    this._internalScore = score;
+    this._visibleState = state;
   }
 
   /**

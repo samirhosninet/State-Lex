@@ -1,0 +1,23 @@
+=== E-7 STATIC STRUCTURAL VERIFICATION ARTIFACT (D-3 / AC-3b) ===
+Compilation Unit: src/domain/services/TrustComponent.ts
+
+Matched Lines (Line Number: Content):
+31:  private computeTransition(delta: number): TrustTransitionResult {
+33:    const score = DeterministicMath.clampTrustScore(rawScore);
+34:    const state = this.evaluateState(score, this._visibleState);
+42:  public previewTransition(delta: number): TrustTransitionResult {
+43:    return this.computeTransition(delta);
+49:  public previewUpdate(delta: number): TrustState {
+50:    return this.computeTransition(delta).state;
+56:  public updateScore(delta: number): TrustState {
+57:    const { score, state } = this.computeTransition(delta);
+66:    this._internalScore = DeterministicMath.clampTrustScore(score);
+67:    this._visibleState = this.evaluateState(this._internalScore, this._visibleState);
+73:  private evaluateState(score: number, currentState: TrustState): TrustState {
+
+Structural Property Analysis:
+1. computeTransition(delta) is the single private transition calculation routine.
+2. previewTransition(delta) delegates directly to computeTransition(delta).
+3. previewUpdate(delta) delegates directly to computeTransition(delta).state.
+4. updateScore(delta) delegates directly to computeTransition(delta) and commitTransition.
+5. Zero duplicated transition logic exists in TrustComponent.ts.

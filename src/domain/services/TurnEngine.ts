@@ -73,6 +73,18 @@ export class GSTTurnEngine {
     return this._trustComponents.map(tc => tc.internalScore);
   }
 
+  public get trustComponents(): TrustComponent[] {
+    return this._trustComponents;
+  }
+
+  public get mutationScheduler(): RuleMutationScheduler {
+    return this._mutationScheduler;
+  }
+
+  public get neglectTracker(): NeglectTracker {
+    return this._neglectTracker;
+  }
+
   public rehydrateState(turnNumber: number, allocation: number[], internalScores?: number[]): void {
     this._turnNumber = turnNumber;
     for (let i = 0; i < 5; i++) {
@@ -106,7 +118,7 @@ export class GSTTurnEngine {
       throw new Error(`Invalid move input: amount ${amt} exceeds source allocation ${this._allocationVector[src]}.`);
     }
 
-    // Atomicity: Clone allocation vector into workspace before performing any mutation
+    // Workspace Allocation
     const allocationBefore = [...this._allocationVector];
     const nextAllocation = [...this._allocationVector];
     const trustStatesBefore = this.trustStates;
@@ -119,25 +131,35 @@ export class GSTTurnEngine {
       throw new Error(`Allocation sum invariant breached: expected 100, got ${sum}.`);
     }
 
-    // Compute deltas and update temporary trust states
+    // Compute rawDeltas
     const rawDeltas = this._influenceMatrix.computeTrustDeltas(nextAllocation);
 
-    // Execute update on trust components (will be reverted if worldChanges/consequences fail)
-    const trustStatesAfter = this._trustComponents.map((tc, idx) => tc.updateScore(rawDeltas[idx]));
-    const internalScoresAfter = this.internalScores;
+    // Compute preview updates without mutating TrustComponents
+    const transitions = this._trustComponents.map((tc, idx) => tc.previewTransition(rawDeltas[idx]));
+    const trustStatesAfter = transitions.map(t => t.state);
+    const internalScoresAfter = transitions.map(t => t.score);
 
+    // Evaluate world changes and consequences (can throw)
     const worldChanges = this._mutationScheduler.evaluateStep6(this._turnNumber, this._influenceMatrix);
     const consequences = this._neglectTracker.evaluateStep7(this._turnNumber, trustStatesAfter);
 
-    // Commit workspace allocation vector to canonical engine state
+    // COMMIT BARRIER START — Commit-Safe operations only below this line until BARRIER END
     for (let i = 0; i < 5; i++) {
       this._allocationVector[i] = nextAllocation[i];
     }
 
+    for (let i = 0; i < 5; i++) {
+      this._trustComponents[i].commitTransition(transitions[i].score, transitions[i].state);
+    }
+
+    const currentTurnNumber = this._turnNumber;
+    this._turnNumber++;
+    // COMMIT BARRIER END
+
     const allocationAfter = [...this._allocationVector];
 
     const result: GSTTurnExecutionResult = {
-      turnNumber: this._turnNumber,
+      turnNumber: currentTurnNumber,
       allocationBefore,
       allocationAfter,
       trustStatesBefore,
@@ -146,8 +168,6 @@ export class GSTTurnEngine {
       worldChanges,
       consequences
     };
-
-    this._turnNumber++;
 
     return result;
   }
