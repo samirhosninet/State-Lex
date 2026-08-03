@@ -35,16 +35,13 @@ export class InfluenceMatrix {
   }
 
   /**
-   * Executes Turn 11 step 6 edge mutation payload.
-   * Modifies edge weights non-retroactively for Turn 12+ calculations.
+   * Previews Turn 11 step 6 edge mutation payload without mutating _edgeWeights.
    */
-  public applyMutation(): { sourceIndex: number; targetIndex: number; previousWeight: number; newWeight: number } {
+  public previewMutation(): { sourceIndex: number; targetIndex: number; previousWeight: number; newWeight: number } {
     const sourceIndex = 0; // StateAdministration
     const targetIndex = 1; // Investors
     const previousWeight = this._edgeWeights[sourceIndex][targetIndex];
     const newWeight = this._turn11Mutation.newWeight;
-
-    this._edgeWeights[sourceIndex][targetIndex] = newWeight;
 
     return {
       sourceIndex,
@@ -52,5 +49,21 @@ export class InfluenceMatrix {
       previousWeight,
       newWeight
     };
+  }
+
+  /**
+   * Applies an already computed edge weight mutation inside the Commit Barrier.
+   */
+  public commitMutation(sourceIndex: number, targetIndex: number, newWeight: number): void {
+    this._edgeWeights[sourceIndex][targetIndex] = newWeight;
+  }
+
+  /**
+   * Legacy entry point executing preview + commit in sequence.
+   */
+  public applyMutation(): { sourceIndex: number; targetIndex: number; previousWeight: number; newWeight: number } {
+    const preview = this.previewMutation();
+    this.commitMutation(preview.sourceIndex, preview.targetIndex, preview.newWeight);
+    return preview;
   }
 }

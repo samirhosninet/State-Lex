@@ -2,15 +2,15 @@
 
 ```
 Document ID: BUGFIX-003
-Version: 1.0
+Version: 1.1
 Status: APPROVED
 Authoritative Source: This document
-Revision Type: Full replacement of all prior BUGFIX-003 drafts
-Last Updated: 2026-08-01
+Revision Type: Full replacement of all prior BUGFIX-003 drafts (Revision v1.1 Scope Extension)
+Last Updated: 2026-08-03
 ```
 
 Status: **APPROVED — Binding Reference for Implementation**
-Supersedes: informal atomicity work in commit `23a9bab`
+Supersedes: informal atomicity work in commit `23a9bab` and Specification v1.0
 Depends on: BUGFIX-002 (Boundary Contract) — `VERIFIED`
 
 ---
@@ -20,7 +20,8 @@ Depends on: BUGFIX-002 (Boundary Contract) — `VERIFIED`
 Extend `GSTTurnEngine.executeTurn()` so that atomicity applies to the **entire**
 observable engine state, not only `allocationVector`. Commit `23a9bab` closed
 BUGFIX-002 fully but left `TrustComponent` internal state (`_internalScore`,
-`_visibleState`) mutable mid-transaction, creating a window in which an
+`_visibleState`) and Step 6 world change state (`RuleMutationScheduler._hasTriggered`,
+`InfluenceMatrix._edgeWeights`) mutable mid-transaction, creating a window in which an
 exception thrown by `evaluateStep6()` or `evaluateStep7()` leaves the engine
 in a partially-committed, internally inconsistent state.
 
@@ -30,10 +31,11 @@ in a partially-committed, internally inconsistent state.
 
 ### In Scope
 - `TrustComponent` preview/commit split (`previewUpdate()` / `updateScore()`)
+- `RuleMutationScheduler` & `InfluenceMatrix` Step 6 preview/commit split (`previewStep6()` / `commitStep6()`)
 - `GSTTurnEngine.executeTurn()` transaction ordering
 - Commit Barrier enforcement
 - Recovery guarantees covering all stateful subsystems touched by `executeTurn()`
-- Test expansion covering AC-1 through AC-5 (including AC-3a and AC-3b) as unit-level tests
+- Test expansion covering AC-1 through AC-5 (including AC-3a, AC-3b, and AC-4a) as unit-level tests
 - Golden Campaign regression verification (AC-6, system-level evidence)
 
 ### Out of Scope / Non-Goals
@@ -63,6 +65,8 @@ Covers:
 - `TrustComponent._internalScore`
 - `TrustComponent._visibleState`
 - `turnNumber`
+- `RuleMutationScheduler._hasTriggered`
+- `InfluenceMatrix._edgeWeights`
 
 **Observable State (definition):** any state that can affect subsequent
 engine behavior, public API results, persistence, replay determinism, or
@@ -196,6 +200,8 @@ If any part of `executeTurn()` throws:
 - `allocationVector` unchanged (value AND reference)
 - `TrustComponent` internal score and visible state unchanged for all actors
 - `turnNumber` unchanged
+- `RuleMutationScheduler._hasTriggered` unchanged
+- `InfluenceMatrix._edgeWeights` unchanged (value semantics)
 - `trustStates` (derived) unchanged
 - `internalScores` (derived) unchanged
 

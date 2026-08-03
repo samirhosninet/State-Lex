@@ -51,7 +51,7 @@ describe('BUGFIX-003 Atomicity Contract & Acceptance Criteria Verification', () 
     const initialStates = engine.trustStates;
 
     // Inject failure inside Step 6 mutation scheduler
-    vi.spyOn(engine.mutationScheduler, 'evaluateStep6').mockImplementationOnce(() => {
+    vi.spyOn(engine.mutationScheduler, 'previewStep6').mockImplementationOnce(() => {
       throw new Error('Simulated evaluateStep6 Failure');
     });
 
@@ -133,6 +133,70 @@ describe('BUGFIX-003 Atomicity Contract & Acceptance Criteria Verification', () 
 
     // Assert allocationVector unchanged
     expect(engine.allocationVector).toEqual(allocBefore);
+  });
+
+  it('AC-4a — Forced Exception After Step 6 Preview, Before Commit Barrier (D-4 & Revision v1.1)', () => {
+    const loader = new DatasetLoader();
+    const engine = new GSTTurnEngine(loader.loadBalanceConfig(), loader.loadInfluenceMatrix());
+
+    // Advance engine to Turn 11
+    for (let turn = 1; turn <= 10; turn++) {
+      engine.executeTurn({ sourceIndex: (turn - 1) % 5, targetIndex: turn % 5, amount: 5 });
+    }
+
+    expect(engine.turnNumber).toBe(11);
+    expect(engine.mutationScheduler.hasTriggered).toBe(false);
+
+    const weightBefore = engine.influenceMatrix.getEdgeWeight(0, 1);
+    const turnBefore = engine.turnNumber;
+    const allocBefore = engine.allocationVector;
+    const scoresBefore = engine.internalScores;
+    const statesBefore = engine.trustStates;
+
+    // Inject failure inside Step 7 neglect tracker
+    vi.spyOn(engine.neglectTracker, 'evaluateStep7').mockImplementationOnce(() => {
+      throw new Error('Simulated evaluateStep7 Failure on Turn 11');
+    });
+
+    expect(() => engine.executeTurn({ sourceIndex: 0, targetIndex: 1, amount: 5 })).toThrow('Simulated evaluateStep7 Failure on Turn 11');
+
+    // Assert Step 6 world change state remains UNCHANGED (uncommitted)
+    expect(engine.mutationScheduler.hasTriggered).toBe(false);
+    expect(engine.influenceMatrix.getEdgeWeight(0, 1)).toBe(weightBefore);
+
+    // Assert entire engine state remains UNCHANGED
+    expect(engine.turnNumber).toBe(turnBefore);
+    expect(engine.allocationVector).toEqual(allocBefore);
+    expect(engine.internalScores).toEqual(scoresBefore);
+    expect(engine.trustStates).toEqual(statesBefore);
+  });
+
+  it('Turn 11 Success Path — Preview/Commit Execution (D-4)', () => {
+    const loader = new DatasetLoader();
+    const engine = new GSTTurnEngine(loader.loadBalanceConfig(), loader.loadInfluenceMatrix());
+
+    // Advance engine to Turn 11
+    for (let turn = 1; turn <= 10; turn++) {
+      engine.executeTurn({ sourceIndex: (turn - 1) % 5, targetIndex: turn % 5, amount: 5 });
+    }
+
+    expect(engine.turnNumber).toBe(11);
+    expect(engine.mutationScheduler.hasTriggered).toBe(false);
+
+    const weightBefore = engine.influenceMatrix.getEdgeWeight(0, 1);
+
+    // Clean execution of Turn 11
+    const res = engine.executeTurn({ sourceIndex: 0, targetIndex: 1, amount: 5 });
+
+    // Assert exactly 1 world change record returned
+    expect(res.worldChanges.length).toBe(1);
+    expect(res.worldChanges[0].turn).toBe(11);
+    expect(res.worldChanges[0].edgeChanged).toEqual([0, 1]);
+    expect(res.worldChanges[0].previousWeight).toBe(weightBefore);
+
+    // Assert state committed post-barrier
+    expect(engine.mutationScheduler.hasTriggered).toBe(true);
+    expect(engine.influenceMatrix.getEdgeWeight(0, 1)).toBe(res.worldChanges[0].newWeight);
   });
 
   it('AC-5 — Forced Exception Immediately Before Commit', () => {

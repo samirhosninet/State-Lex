@@ -81,6 +81,10 @@ export class GSTTurnEngine {
     return this._mutationScheduler;
   }
 
+  public get influenceMatrix(): InfluenceMatrix {
+    return this._influenceMatrix;
+  }
+
   public get neglectTracker(): NeglectTracker {
     return this._neglectTracker;
   }
@@ -139,8 +143,8 @@ export class GSTTurnEngine {
     const trustStatesAfter = transitions.map(t => t.state);
     const internalScoresAfter = transitions.map(t => t.score);
 
-    // Evaluate world changes and consequences (can throw)
-    const worldChanges = this._mutationScheduler.evaluateStep6(this._turnNumber, this._influenceMatrix);
+    // Preview world changes (non-mutating) and evaluate consequences (can throw)
+    const pendingStep6 = this._mutationScheduler.previewStep6(this._turnNumber, this._influenceMatrix);
     const consequences = this._neglectTracker.evaluateStep7(this._turnNumber, trustStatesAfter);
 
     // COMMIT BARRIER START — Commit-Safe operations only below this line until BARRIER END
@@ -151,6 +155,8 @@ export class GSTTurnEngine {
     for (let i = 0; i < 5; i++) {
       this._trustComponents[i].commitTransition(transitions[i].score, transitions[i].state);
     }
+
+    const worldChanges = this._mutationScheduler.commitStep6(pendingStep6, this._influenceMatrix);
 
     const currentTurnNumber = this._turnNumber;
     this._turnNumber++;
