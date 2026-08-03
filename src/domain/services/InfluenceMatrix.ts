@@ -57,13 +57,4 @@ export class InfluenceMatrix {
   public commitMutation(sourceIndex: number, targetIndex: number, newWeight: number): void {
     this._edgeWeights[sourceIndex][targetIndex] = newWeight;
   }
-
-  /**
-   * Legacy entry point executing preview + commit in sequence.
-   */
-  public applyMutation(): { sourceIndex: number; targetIndex: number; previousWeight: number; newWeight: number } {
-    const preview = this.previewMutation();
-    this.commitMutation(preview.sourceIndex, preview.targetIndex, preview.newWeight);
-    return preview;
-  }
 }

@@ -57,12 +57,4 @@ export class RuleMutationScheduler {
     }
     return [];
   }
-
-  /**
-   * Legacy entry point executing preview and commit in sequence.
-   */
-  public evaluateStep6(turnNumber: number, matrix: InfluenceMatrix): WorldChangeRecord[] {
-    const pending = this.previewStep6(turnNumber, matrix);
-    return this.commitStep6(pending, matrix);
-  }
 }
