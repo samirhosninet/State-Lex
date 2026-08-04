@@ -9,10 +9,29 @@ import { CausalProjection } from '../../domain/services/CausalProjection';
 
 const CAUSE_TYPES = ['state_admin', 'investors', 'security', 'communities', 'media'];
 
+export interface WorldChangeRecordDTO {
+  readonly turn: number;
+  readonly edgeChanged: readonly [number, number];
+  readonly previousWeight: number;
+  readonly newWeight: number;
+}
+
+export interface ConsequenceRecordDTO {
+  readonly turn: number;
+  readonly actorIndex: number;
+  readonly eventId: string;
+}
+
+export interface TurnTelemetryDTO {
+  readonly worldChanges: readonly WorldChangeRecordDTO[];
+  readonly consequences: readonly ConsequenceRecordDTO[];
+}
+
 export interface ProcessTurnResponse {
   readonly snapshot: GameStateSnapshotDTO;
   readonly prngCallsCount: number;
   readonly stateHash: string;
+  readonly telemetry?: TurnTelemetryDTO;
 }
 
 export type ProcessTurnInput = GSTAllocationMoveInput | Record<string, unknown> | null;
@@ -30,6 +49,7 @@ export class ProcessTurnUseCase {
     const engine = GameStateMapper.fromGSTSnapshot(currentSnapshot, balanceConfig, matrixData);
 
     let lastMoveDTO;
+    let turnTelemetry: TurnTelemetryDTO | undefined;
     if (moveInput) {
       const src = (moveInput as Record<string, unknown>).sourceIndex;
       const tgt = (moveInput as Record<string, unknown>).targetIndex;
@@ -59,8 +79,21 @@ export class ProcessTurnUseCase {
         amount: amt
       };
 
-      engine.executeTurn(gstMove);
+      const turnResult = engine.executeTurn(gstMove);
       lastMoveDTO = gstMove;
+      turnTelemetry = {
+        worldChanges: turnResult.worldChanges.map(wc => ({
+          turn: wc.turn,
+          edgeChanged: wc.edgeChanged,
+          previousWeight: wc.previousWeight,
+          newWeight: wc.newWeight
+        })),
+        consequences: turnResult.consequences.map(c => ({
+          turn: c.turn,
+          actorIndex: c.actorIndex,
+          eventId: c.eventId
+        }))
+      };
     }
 
     const matrix = new InfluenceMatrix(matrixData);
@@ -88,7 +121,8 @@ export class ProcessTurnUseCase {
     return {
       snapshot: snapshotDTO,
       prngCallsCount: 0,
-      stateHash
+      stateHash,
+      telemetry: turnTelemetry
     };
   }
 }
